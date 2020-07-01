@@ -1,15 +1,15 @@
 const { Loader } = require('../structures')
 
 module.exports = class ListenerLoader extends Loader {
-  constructor(client) {
+  constructor (client) {
     super(client)
   }
 
-  load() {
+  load () {
     return this.loadFiles('core/listeners')
   }
 
-  loadFile(Listener, event) {
+  loadFile (Listener, event) {
     const listener = new Listener(this.client)
     const capitalize = (string) => string.charAt(0).toUpperCase() + string.slice(1)
 

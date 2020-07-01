@@ -2,27 +2,27 @@ const { Client } = require('discord.js')
 const Loaders = require('../../loaders')
 
 module.exports = class Nocronok extends Client {
-  constructor(options) {
+  constructor (options) {
     super(options)
 
     this.initializeLoaders()
     this.login()
   }
 
-  login(token = process.env.DISCORD_TOKEN) {
+  login (token = process.env.DISCORD_TOKEN) {
     return super.login(token)
   }
 
-  log(message) {
+  log (message) {
     console.log(message)
   }
 
-  logError(...args) {
+  logError (...args) {
     console.error(args)
   }
 
-  async initializeLoaders() {
-    for (let name in Loaders) {
+  async initializeLoaders () {
+    for (const name in Loaders) {
       const loader = new Loaders[name](this)
 
       try {

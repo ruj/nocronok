@@ -3,7 +3,7 @@ const { resolve } = require('path')
 const { promisify } = require('util')
 
 module.exports = class FileUtils {
-  static async requireDirectory(directory, success, error, recursive = true) {
+  static async requireDirectory (directory, success, error, recursive = true) {
     const files = await FileUtils.readdir(directory)
     const filesObject = {}
 
@@ -36,8 +36,8 @@ module.exports = class FileUtils {
         }
       }
     }))
-    .then(() => filesObject)
-    .catch(console.error)
+      .then(() => filesObject)
+      .catch(console.error)
   }
 }
 
