@@ -4,3 +4,5 @@ const CLIENT_OPTIONS = {
 
 const { Nocronok } = require('./structures/Base')
 const client = new Nocronok(CLIENT_OPTIONS)
+
+client.log('Starting')
