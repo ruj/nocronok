@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:tenasatupitsyn/nocronok.git"
+    "url": "git@github.com:tentaclenotsoft/nocronok.git"
   },
   "keywords": [
     "discord"
@@ -23,9 +23,9 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tenasatupitsyn/nocronok/issues"
+    "url": "https://github.com/tentaclenotsoft/nocronok/issues"
   },
-  "homepage": "https://github.com/tenasatupitsyn/nocronok",
+  "homepage": "https://github.com/tentaclenotsoft/nocronok",
   "dependencies": {
     "discord.js": "^12.2.0"
   },
