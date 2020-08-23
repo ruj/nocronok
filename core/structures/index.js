@@ -1,4 +1,4 @@
-const CommandStructures = require('./Command')
+const CommandStructures = require('./command')
 
 module.exports = {
   CommandStructures,
