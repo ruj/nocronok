@@ -32,4 +32,8 @@ module.exports = class Nocronok extends Client {
       }
     }
   }
+
+  executeCommand (command, context, parameters) {
+    return command._execute(context, parameters).catch(this.logError)
+  }
 }
