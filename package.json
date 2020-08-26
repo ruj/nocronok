@@ -4,6 +4,7 @@
   "main": "core/index.js",
   "scripts": {
     "dev": "nodemon core/index.js",
+    "dev:shard": "node -r dotenv/config core/Shard.js",
     "fix": "standard --fix"
   },
   "engines": {
