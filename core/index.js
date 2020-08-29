@@ -5,4 +5,4 @@ const CLIENT_OPTIONS = {
 const { Nocronok } = require('./structures/base')
 const client = new Nocronok(CLIENT_OPTIONS)
 
-client.log('Starting')
+client.login().catch(client.logError)

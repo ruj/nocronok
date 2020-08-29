@@ -6,11 +6,6 @@ module.exports = class Nocronok extends Client {
     super(options)
 
     this.initializeLoaders()
-    this.login()
-  }
-
-  login (token = process.env.DISCORD_TOKEN) {
-    return super.login(token)
   }
 
   log (message) {
