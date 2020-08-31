@@ -1,10 +1,9 @@
-const { readdir, stat } = require('fs')
+const { promises: { readdir, stat } } = require('fs')
 const { resolve } = require('path')
-const { promisify } = require('util')
 
 module.exports = class FileUtils {
   static async requireDirectory (directory, success, error, recursive = true) {
-    const files = await FileUtils.readdir(directory)
+    const files = await readdir(directory)
     const filesObject = {}
 
     return Promise.all(files.map(async (file) => {
@@ -29,7 +28,7 @@ module.exports = class FileUtils {
           error(_error)
         }
       } else if (recursive) {
-        const isDirectory = await FileUtils.stat(path).then((file) => file.isDirectory())
+        const isDirectory = await stat(path).then((file) => file.isDirectory())
 
         if (isDirectory) {
           return FileUtils.requireDirectory(path, success, error)
@@ -40,6 +39,3 @@ module.exports = class FileUtils {
       .catch(console.error)
   }
 }
-
-module.exports.readdir = promisify(readdir)
-module.exports.stat = promisify(stat)
