@@ -1,8 +1,12 @@
+const { optionHandler } = require('../../utils')
+
 module.exports = class Command {
   constructor (options, client) {
-    this.name = options.name
-    this.aliases = options.aliases
-    this.category = options.category
+    options = optionHandler('Command', options)
+
+    this.name = options.required('name')
+    this.aliases = options.optional('aliases')
+    this.category = options.default('category', 'general')
 
     this.client = client
   }
