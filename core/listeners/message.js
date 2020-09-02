@@ -1,4 +1,4 @@
-const { Listener } = require('../structures')
+const { CommandContext, Listener } = require('../structures')
 
 module.exports = class Message extends Listener {
   constructor (client) {
@@ -20,11 +20,11 @@ module.exports = class Message extends Listener {
       const command = this.client.commands.find((command) => command.name.toLowerCase() === commandName || (command.aliases && command.aliases.includes(commandName)))
 
       if (command) {
-        const context = {
+        const context = new CommandContext({
           client: this.client,
           message,
           command
-        }
+        })
 
         this.client.executeCommand(command, context, parameters)
       }

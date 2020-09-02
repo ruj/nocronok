@@ -1,3 +1,4 @@
 module.exports = {
-  Command: require('./Command.js')
+  Command: require('./Command.js'),
+  Context: require('./Context.js')
 }
