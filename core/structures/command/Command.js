@@ -15,7 +15,15 @@ module.exports = class Command {
     try {
       await this.execute(context, parameters)
     } catch (error) {
-      this.client.logError(error)
+      this.error(context, error)
     }
+  }
+
+  error ({ channel }, error) {
+    if (error instanceof Error) {
+      return channel.send(error.message, { code: 'fix' })
+    }
+
+    this.client.logError(error)
   }
 }
