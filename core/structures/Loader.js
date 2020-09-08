@@ -8,6 +8,6 @@ module.exports = class Loader {
   async loadFiles (path) {
     await FileUtils.requireDirectory(path, (file, filename) => {
       this.loadFile(file, filename)
-    }, this.client.logError)
+    }, this.client.printError)
   }
 }

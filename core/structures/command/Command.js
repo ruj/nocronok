@@ -24,6 +24,6 @@ module.exports = class Command {
       return channel.send(error.message, { code: 'fix' })
     }
 
-    this.client.logError(error)
+    this.client.printError(error)
   }
 }

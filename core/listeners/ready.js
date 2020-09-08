@@ -6,6 +6,6 @@ module.exports = class Ready extends Listener {
   }
 
   onReady () {
-    this.client.log(this.client.user)
+    this.client.print('ready', `${this.client.user.tag} (${this.client.user.id})`)
   }
 }
