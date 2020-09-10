@@ -10,8 +10,8 @@ module.exports = class Nocronok extends Client {
     this.initializeLoaders()
   }
 
-  print (tag, message, options) {
-    this.logger.print(tag, message, options)
+  print (scope, message, options) {
+    this.logger.print(scope, message, options)
   }
 
   printError (...args) {
