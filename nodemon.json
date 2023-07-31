@@ -1,5 +1,8 @@
 {
+  "verbose": true,
+  "legacyWatch": true,
+  "watch": ["src/**/*.ts"],
   "execMap": {
-    "js": "node -r dotenv/config"
+    "ts": "node --nolazy -r dotenv/config -r ts-node/register"
   }
 }
