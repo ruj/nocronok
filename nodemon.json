@@ -3,6 +3,6 @@
   "legacyWatch": true,
   "watch": ["src/**/*.ts"],
   "execMap": {
-    "ts": "node --nolazy -r dotenv/config -r ts-node/register"
+    "ts": "node --nolazy -r dotenv/config -r ts-node/register -r tsconfig-paths/register"
   }
 }

@@ -15,7 +15,11 @@
       "warn",
       {
         "newlinesBetween": "always",
-        "groups": ["module", ["parent", "sibling", "index"]],
+        "groups": [
+          "module",
+          "/^@(interfaces|loaders|structures|utils)/",
+          ["parent", "sibling", "index"]
+        ],
         "alphabetize": { "order": "asc", "ignoreCase": true }
       }
     ],

@@ -4,6 +4,14 @@
     "module": "CommonJS",
     "rootDir": "./src",
     "moduleResolution": "Node",
+    "baseUrl": "./src",
+    "paths": {
+      "@interfaces": ["interfaces"],
+      "@loaders": ["loaders"],
+      "@structures/*": ["structures/*"],
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"]
+    },
     "resolveJsonModule": true,
     "allowJs": true,
     "sourceMap": true,

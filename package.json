@@ -2,7 +2,10 @@
   "name": "nocronok",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build": "yarn clean && yarn build:src",
+    "build:src": "tsc && tsc-alias -p tsconfig.json",
+    "start": "node -r dotenv/config dist/index.js",
     "start:dev": "nodemon src/index.ts"
   },
   "license": "BSD-4-Clause",
@@ -27,6 +30,8 @@
     "nodemon": "^3.0.1",
     "prettier": "^3.0.0",
     "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.7",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "*"
   },
   "optionalDependencies": {
