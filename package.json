@@ -11,6 +11,7 @@
   "license": "BSD-4-Clause",
   "dependencies": {
     "discord.js": "^14.11.0",
+    "lodash": "^4.17.21",
     "pino": "^8.14.2"
   },
   "devDependencies": {
