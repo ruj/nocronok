@@ -2,12 +2,13 @@ import sample from 'lodash/sample'
 
 import {
   IListenerOptions,
-  IOptionHandler
+  IOptionHandler,
+  IRouteOptions
 } from '@interfaces'
 
 export const optionHandler = (
   structure: string,
-  options: IListenerOptions
+  options: IListenerOptions | IRouteOptions
 ): IOptionHandler => ({
   default (name: string, defaultValue: any | any[]): any {
     const value = options[name]

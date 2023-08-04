@@ -1,3 +1,4 @@
+import HTTPLoader from './HTTPLoader'
 import ListenerLoader from './ListenerLoader'
 
-export default { ListenerLoader }
+export default { HTTPLoader, ListenerLoader }
