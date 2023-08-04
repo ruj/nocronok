@@ -1,12 +1,12 @@
 import { readdir, stat } from 'fs/promises'
-import { resolve } from 'path'
+import { resolve, sep } from 'path'
 
 import { IRequireDirectoryOptions } from '@interfaces'
 
 export default class File {
   public static async requireDirectory (
     directory: string,
-    success: (required, filename: string) => void,
+    success: (required, filename: string, parent: string) => void,
     error: (error) => void,
     options: IRequireDirectoryOptions = {
       extensions: ['js', 'ts'],
@@ -28,14 +28,16 @@ export default class File {
           try {
             const { default: required } = await import(path)
             const filename = file.match(/^\w+/)![0]
+            const parent = path.split(sep).reverse()[1]
 
             if (success) {
-              await success(required, filename)
+              await success(required, filename, parent)
             }
 
             filesObject[filename] = {
               required,
-              filename
+              filename,
+              parent
             }
 
             return required

@@ -9,7 +9,7 @@ import type Nocronok from './base/Nocronok'
 export default abstract class Loader {
   public client: Nocronok
   public logger: Logger
-  public abstract loadFile(file, filename: string): void
+  public abstract loadFile(file, filename: string, parent: string): void
 
   constructor (client: Nocronok) {
     this.client = client
@@ -19,7 +19,7 @@ export default abstract class Loader {
   public async loadFiles (path: string, options?: IRequireDirectoryOptions) {
     await File.requireDirectory(
       this.resolvePath(path),
-      (file, filename) => this.loadFile(file, filename),
+      (file, filename, parent) => this.loadFile(file, filename, parent),
       console.error,
       options
     )
