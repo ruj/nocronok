@@ -2,7 +2,7 @@ import { Client, GatewayIntentBits } from 'discord.js'
 
 import loaders from '@loaders'
 
-import Logger from './Logger'
+import { logger } from './Logger'
 
 export default class Nocronok extends Client {
   public logger
@@ -12,7 +12,7 @@ export default class Nocronok extends Client {
       intents: [GatewayIntentBits.Guilds]
     })
 
-    this.logger = new Logger({ prettyPrint: true })
+    this.logger = logger({ prettyPrint: true })
 
     this.initializeLoaders()
   }
