@@ -1,17 +1,13 @@
 import sample from 'lodash/sample'
 
-import {
-  IListenerOptions,
-  IOptionHandler,
-  IRouteOptions
-} from '@interfaces'
+import { IListenerOptions, IOptionHandler, IRouteOptions } from '@interfaces'
 
 export const optionHandler = (
   structure: string,
   options: IListenerOptions | IRouteOptions
 ): IOptionHandler => ({
   default (name: string, defaultValue: any | any[]): any {
-    const value = options[name]
+    const value = options[name as keyof typeof options]
 
     return typeof value === 'undefined'
       ? Array.isArray(defaultValue)
@@ -20,10 +16,10 @@ export const optionHandler = (
       : value
   },
   optional (name: string): any | null {
-    return options[name] || null
+    return options[name as keyof typeof options] || null
   },
   required (name: string) {
-    const value = options[name]
+    const value = options[name as keyof typeof options]
 
     if (typeof value === 'undefined') {
       throw new Error(

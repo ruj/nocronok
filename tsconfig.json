@@ -4,7 +4,6 @@
     "module": "CommonJS",
     "rootDir": "./src",
     "moduleResolution": "Node",
-    "noImplicitAny": false,
     "baseUrl": "./src",
     "paths": {
       "@interfaces": ["interfaces"],

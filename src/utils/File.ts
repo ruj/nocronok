@@ -1,20 +1,20 @@
 import { readdir, stat } from 'fs/promises'
 import { resolve, sep } from 'path'
 
-import { IRequireDirectoryOptions } from '@interfaces'
+import { IFileObject, IRequireDirectoryOptions } from '@interfaces'
 
 export default class File {
   public static async requireDirectory (
     directory: string,
-    success: (required, filename: string, parent: string) => void,
-    error: (error) => void,
+    success: (required: unknown, filename: string, parent: string) => void,
+    error: (error: unknown) => void,
     options: IRequireDirectoryOptions = {
       extensions: ['js', 'ts'],
       recursive: true
     }
-  ) {
+  ): Promise<unknown> {
     const files = await readdir(directory)
-    const filesObject = {}
+    const filesObject = {} as { [key: string]: IFileObject }
 
     return Promise.all(
       files.map(async (file) => {

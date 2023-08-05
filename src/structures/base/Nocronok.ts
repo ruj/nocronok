@@ -19,7 +19,7 @@ export default class Nocronok extends Client {
 
   private async initializeLoaders () {
     for (const name in loaders) {
-      const loader = new loaders[name](this)
+      const loader = new loaders[name as keyof typeof loaders](this)
 
       try {
         await loader.load()

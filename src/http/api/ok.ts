@@ -1,9 +1,11 @@
 import { Request, Response } from 'express'
 
+import { IRouteOptions } from '@interfaces'
+import type Nocronok from '@structures/base/Nocronok'
 import Route from '@structures/Route'
 
 export default class Ok extends Route {
-  constructor (client, options) {
+  constructor (client: Nocronok, options: IRouteOptions) {
     super(client, {
       ...options,
       endpoints: [{ method: 'GET', path: '/', handler: 'ok' }]

@@ -9,7 +9,11 @@ import type Nocronok from './base/Nocronok'
 export default abstract class Loader {
   public client: Nocronok
   public logger: Logger
-  public abstract loadFile(file, filename: string, parent: string): void
+  public abstract loadFile(
+    file: unknown,
+    filename: string,
+    parent: string
+  ): void
 
   constructor (client: Nocronok) {
     this.client = client

@@ -1,14 +1,17 @@
 import express, { Express, Router } from 'express'
 
+import { IRouteEndpoint } from '@interfaces'
+import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
 
 export default class HTTPLoader extends Loader {
   public http: Express
   public router: Router
 
-  constructor (client) {
+  constructor (client: Nocronok) {
     super(client)
 
+    this.http = express()
     this.router = Router()
   }
 
@@ -18,13 +21,16 @@ export default class HTTPLoader extends Loader {
     return this.loadFiles('http')
   }
 
-  public loadFile (Route, name: string, parent: string) {
+  public loadFile (Route: any, name: string, parent: string) {
     const route = new Route(this.client, { name })
 
     if (!route.endpoints?.length) return false
 
-    route.endpoints?.forEach(({ method, path, handler }) => {
-      this.router[method.toLowerCase()](path, (...variables) =>
+    route.endpoints?.forEach(({ method, path, handler }: IRouteEndpoint) => {
+      const toLowerCase = <T extends string>(value: T) =>
+        value.toLowerCase() as Lowercase<T>
+
+      this.router[toLowerCase(method)](path, (...variables: unknown[]) =>
         route[handler](...variables)
       )
 
@@ -42,8 +48,6 @@ export default class HTTPLoader extends Loader {
         'Server not started - Environment variable "PORT" is not set'
       )
     }
-
-    this.http = express()
 
     this.http.use(express.json())
 
