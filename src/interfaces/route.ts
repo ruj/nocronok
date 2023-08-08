@@ -1,7 +1,7 @@
 export interface IRouteEndpoint {
   method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
   path: string
-  handler: string
+  handler?: string
 }
 
 export interface IRouteOptions {

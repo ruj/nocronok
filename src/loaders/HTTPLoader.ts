@@ -31,7 +31,7 @@ export default class HTTPLoader extends Loader {
         value.toLowerCase() as Lowercase<T>
 
       this.router[toLowerCase(method)](path, (...variables: unknown[]) =>
-        route[handler](...variables)
+        route[handler ?? 'handler'](...variables)
       )
 
       this.http.use(

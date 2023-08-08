@@ -8,11 +8,11 @@ export default class Ok extends Route {
   constructor (client: Nocronok, options: IRouteOptions) {
     super(client, {
       ...options,
-      endpoints: [{ method: 'GET', path: '/', handler: 'ok' }]
+      endpoints: [{ method: 'GET', path: '/' }]
     })
   }
 
-  public ok (request: Request, response: Response) {
+  public handler (request: Request, response: Response) {
     return response.sendStatus(200)
   }
 }
