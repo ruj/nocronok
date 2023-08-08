@@ -27,7 +27,7 @@ export default class File {
         if (file.match(new RegExp(`\\.(${extensions})$`))) {
           try {
             const { default: required } = await import(path)
-            const filename = file.match(/^\w+/)![0]
+            const filename = file.replace(/\.[^/.]+$/, '')
             const parent = path.split(sep).reverse()[1]
 
             if (success) {
