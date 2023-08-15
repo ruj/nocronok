@@ -6,7 +6,7 @@ import { IFileObject, IRequireDirectoryOptions } from '@interfaces'
 export default class File {
   public static async requireDirectory (
     directory: string,
-    success: (required: unknown, filename: string, parent: string) => void,
+    success: (required: any, filename: string, parent: string) => void,
     error: (error: unknown) => void,
     options: IRequireDirectoryOptions = {
       extensions: ['js', 'ts'],
