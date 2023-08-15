@@ -1,3 +1,4 @@
+export * from './command'
 export * from './file'
 export * from './listener'
 export * from './route'

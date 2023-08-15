@@ -1,10 +1,11 @@
+import { ICommandOptions } from 'interfaces/command'
 import sample from 'lodash/sample'
 
 import { IListenerOptions, IOptionHandler, IRouteOptions } from '@interfaces'
 
 export const optionHandler = (
   structure: string,
-  options: IListenerOptions | IRouteOptions
+  options: ICommandOptions | IListenerOptions | IRouteOptions
 ): IOptionHandler => ({
   default (name: string, defaultValue: any | any[]): any {
     const value = options[name as keyof typeof options]
