@@ -1,3 +1,4 @@
+import { Router } from 'express'
 import type { Logger } from 'pino'
 
 import { IOptionHandler, IRouteEndpoint, IRouteOptions } from '@interfaces'
@@ -11,6 +12,7 @@ export default class Route {
   public logger: Logger
   public name: string
   public endpoints: IRouteEndpoint[]
+  public router: Router
 
   constructor (client: Nocronok, options: IRouteOptions) {
     this.client = client
@@ -20,5 +22,7 @@ export default class Route {
 
     this.name = this.routeOptions.required('name')
     this.endpoints = this.routeOptions.required('endpoints')
+
+    this.router = Router()
   }
 }

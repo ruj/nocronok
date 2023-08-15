@@ -1,4 +1,4 @@
-import express, { Express, Router } from 'express'
+import express, { Express } from 'express'
 
 import { IRouteEndpoint } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
@@ -6,13 +6,11 @@ import Loader from '@structures/Loader'
 
 export default class HTTPLoader extends Loader {
   public http: Express
-  public router: Router
 
   constructor (client: Nocronok) {
     super(client)
 
     this.http = express()
-    this.router = Router()
   }
 
   public load () {
@@ -30,13 +28,13 @@ export default class HTTPLoader extends Loader {
       const toLowerCase = <T extends string>(value: T) =>
         value.toLowerCase() as Lowercase<T>
 
-      this.router[toLowerCase(method)](path, (...variables: unknown[]) =>
+      route.router[toLowerCase(method)](path, (...variables: unknown[]) =>
         route[handler ?? 'handler'](...variables)
       )
 
       this.http.use(
         `/${parent}/${route.name}${!path.startsWith('/') ? `/${path}` : path}`,
-        this.router
+        route.router
       )
     })
   }
