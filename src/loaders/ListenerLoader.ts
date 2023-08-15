@@ -1,4 +1,4 @@
-import capitalize from 'lodash/capitalize'
+import upperFirst from 'lodash/upperFirst'
 
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
@@ -16,7 +16,7 @@ export default class ListenerLoader extends Loader {
     const listener = new Listener(this.client)
     const prepareEvent = (event: string) =>
       this.client.on(event, (...variables) =>
-        listener['on' + capitalize(event)](...variables)
+        listener['on' + upperFirst(event)](...variables)
       )
 
     if (listener.unifiedEvents) {
