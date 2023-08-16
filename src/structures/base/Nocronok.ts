@@ -28,7 +28,7 @@ export default class Nocronok extends Client {
       } catch (error) {
         if (error instanceof Error) {
           this.logger.error(
-            { labels: ['initializeLoaders'], loader: name },
+            { labels: ['initializeLoaders', name] },
             error.message
           )
         }
