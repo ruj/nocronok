@@ -26,7 +26,7 @@ export default class InteractionCreate extends Listener {
       const context = new Context({ interaction })
 
       this.logger.debug(
-        { labels: ['interactionCreate', commandName] },
+        { labels: ['Listener', 'interactionCreate'] },
         `/${commandName} run by ${
           !+user.discriminator ? user.username : user.tag
         } (${user.id}) on channel ${
