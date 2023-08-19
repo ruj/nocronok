@@ -6,6 +6,7 @@ import { logger } from './Logger'
 
 export default class Nocronok extends Client {
   public logger
+  public apis: { [key: string]: any }
   public commands: Map<string, any>
 
   constructor () {
@@ -14,6 +15,8 @@ export default class Nocronok extends Client {
     })
 
     this.logger = logger({ prettyPrint: true })
+
+    this.apis = {}
     this.commands = new Map()
 
     this.initializeLoaders()
