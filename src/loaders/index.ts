@@ -1,6 +1,6 @@
 import ApiLoader from './ApiLoader'
 import CommandLoader from './CommandLoader'
-import HTTPLoader from './HTTPLoader'
+import HttpLoader from './HttpLoader'
 import ListenerLoader from './ListenerLoader'
 
-export default { ApiLoader, CommandLoader, HTTPLoader, ListenerLoader }
+export default { ApiLoader, CommandLoader, HttpLoader, ListenerLoader }
