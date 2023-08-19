@@ -1,4 +1,4 @@
-import express, { Express } from 'express'
+import express, { Express, NextFunction, Request, Response } from 'express'
 
 import { IRouteEndpoint } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
@@ -48,9 +48,25 @@ export default class HttpLoader extends Loader {
     }
 
     this.http.use(express.json())
+    this.http.use(this.passwordValidation)
 
     this.http.listen(port, () =>
       this.logger.info({ labels: ['HttpLoader'] }, `Listening on port ${port}`)
     )
+  }
+
+  private passwordValidation (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
+    const password = process.env.API_PASSWORD
+    const requestPassword = request.headers['X-Password'.toLowerCase()]
+
+    if (!requestPassword || password !== requestPassword) {
+      return response.status(401).json({ status: 401, message: 'Unauthorized' })
+    }
+
+    next()
   }
 }
