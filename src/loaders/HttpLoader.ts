@@ -4,7 +4,7 @@ import { IRouteEndpoint } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
 
-export default class HTTPLoader extends Loader {
+export default class HttpLoader extends Loader {
   public http: Express
 
   constructor (client: Nocronok) {
@@ -42,7 +42,7 @@ export default class HTTPLoader extends Loader {
   private initializeHTTPServer (port = process.env.PORT) {
     if (!port) {
       return this.logger.warn(
-        { labels: ['HTTPLoader'] },
+        { labels: ['HttpLoader'] },
         'Server not started - Environment variable "PORT" is not set'
       )
     }
@@ -50,7 +50,7 @@ export default class HTTPLoader extends Loader {
     this.http.use(express.json())
 
     this.http.listen(port, () =>
-      this.logger.info({ labels: ['HTTPLoader'] }, `Listening on port ${port}`)
+      this.logger.info({ labels: ['HttpLoader'] }, `Listening on port ${port}`)
     )
   }
 }
