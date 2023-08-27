@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from 'express'
+import type { Logger } from 'pino'
 
 import { IRouteEndpoint } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
@@ -48,25 +49,35 @@ export default class HttpLoader extends Loader {
     }
 
     this.http.use(express.json())
-    this.http.use(this.passwordValidation)
+    this.http.use(this.passwordValidation(this.logger))
 
     this.http.listen(port, () =>
       this.logger.info({ labels: ['HttpLoader'] }, `Listening on port ${port}`)
     )
   }
 
-  private passwordValidation (
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    const password = process.env.API_PASSWORD
-    const requestPassword = request.headers['X-Password'.toLowerCase()]
+  private passwordValidation (logger: Logger) {
+    return (request: Request, response: Response, next: NextFunction) => {
+      const httpPassword = process.env.HTTP_PASSWORD
 
-    if (!requestPassword || password !== requestPassword) {
-      return response.status(401).json({ status: 401, message: 'Unauthorized' })
+      if (!httpPassword) {
+        logger.warn(
+          { labels: ['HttpLoader'] },
+          'Unprotected requests - Environment variable "HTTP_PASSWORD" is not set'
+        )
+
+        return next()
+      }
+
+      const password = request.headers['X-Password'.toLowerCase()]
+
+      if (!password || password !== httpPassword) {
+        return response
+          .status(401)
+          .json({ status: 401, message: 'Unauthorized' })
+      }
+
+      next()
     }
-
-    next()
   }
 }
