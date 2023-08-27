@@ -4,6 +4,7 @@ import type { Logger } from 'pino'
 import { IRouteEndpoint } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
+import { Errors } from '@utils/Constants'
 
 export default class HttpLoader extends Loader {
   public http: Express
@@ -44,7 +45,7 @@ export default class HttpLoader extends Loader {
     if (!port) {
       return this.logger.warn(
         { labels: ['HttpLoader'] },
-        'Server not started - Environment variable "PORT" is not set'
+        Errors.Loaders.HttpLoader.PORT_IS_NOT_SET
       )
     }
 
@@ -63,7 +64,7 @@ export default class HttpLoader extends Loader {
       if (!httpPassword) {
         logger.warn(
           { labels: ['HttpLoader'] },
-          'Unprotected requests - Environment variable "HTTP_PASSWORD" is not set'
+          Errors.Loaders.HttpLoader.HTTP_PASSWORD_IS_NOT_SET
         )
 
         return next()
