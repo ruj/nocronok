@@ -41,7 +41,7 @@ export default class HttpLoader extends Loader {
     })
   }
 
-  private initializeHTTPServer (port = process.env.PORT) {
+  private initializeHTTPServer (port = this.client.defaultOptions.env.PORT) {
     if (!port) {
       return this.logger.warn(
         { labels: ['HttpLoader'] },
@@ -59,7 +59,7 @@ export default class HttpLoader extends Loader {
 
   private passwordValidation (logger: Logger) {
     return (request: Request, response: Response, next: NextFunction) => {
-      const httpPassword = process.env.HTTP_PASSWORD
+      const httpPassword = this.client.defaultOptions.env.HTTP_PASSWORD
 
       if (!httpPassword) {
         logger.warn(

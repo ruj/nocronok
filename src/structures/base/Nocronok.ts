@@ -1,11 +1,14 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 
+import { IDefaultOptions } from '@interfaces'
 import loaders from '@loaders'
+import Options from '@utils/Options'
 
 import { logger } from './Logger'
 
 export default class Nocronok extends Client {
   public logger
+  public defaultOptions: IDefaultOptions
   public apis: { [key: string]: any }
   public commands: Map<string, any>
 
@@ -15,6 +18,7 @@ export default class Nocronok extends Client {
     })
 
     this.logger = logger({ prettyPrint: true })
+    this.defaultOptions = Options.defaultOptions()
 
     this.apis = {}
     this.commands = new Map()
