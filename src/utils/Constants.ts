@@ -1,4 +1,6 @@
-export const EnvVars = ['PORT', 'HTTP_PASSWORD']
+import { EEnvironmentVariables } from '@enums'
+
+export const EnvVars = Object.keys(EEnvironmentVariables)
 
 export const Errors = {
   Loaders: {

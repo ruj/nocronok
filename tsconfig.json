@@ -6,6 +6,7 @@
     "moduleResolution": "Node",
     "baseUrl": "./src",
     "paths": {
+      "@enums": ["enums"],
       "@interfaces": ["interfaces"],
       "@loaders": ["loaders"],
       "@structures/*": ["structures/*"],

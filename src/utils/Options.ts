@@ -1,5 +1,6 @@
 import pick from 'lodash/pick'
 
+import { EEnvironmentVariables } from '@enums'
 import { IDefaultOptions } from '@interfaces'
 
 import { EnvVars } from './Constants'
@@ -16,7 +17,7 @@ export default class Options extends null {
 
     for (const [key, value] of Object.entries(pick(process.env, envVars))) {
       if (key) {
-        envs[key as keyof typeof envs] = value && JSON.parse(value)
+        envs[key as EEnvironmentVariables] = value && JSON.parse(value)
       }
     }
 

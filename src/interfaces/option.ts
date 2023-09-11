@@ -1,5 +1,7 @@
 /* global NodeJS */
 
+import { EEnvironmentVariables } from '@enums'
+
 export interface IDefaultOptions {
-  env: Pick<NodeJS.ProcessEnv, 'PORT' | 'HTTP_PASSWORD'>
+  env: Pick<NodeJS.ProcessEnv, EEnvironmentVariables>
 }

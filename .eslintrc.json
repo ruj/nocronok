@@ -17,7 +17,7 @@
         "newlinesBetween": "always",
         "groups": [
           "module",
-          "/^@(interfaces|loaders|structures|utils)/",
+          "/^@(enums|interfaces|loaders|structures|utils)/",
           ["parent", "sibling", "index"]
         ],
         "alphabetize": { "order": "asc", "ignoreCase": true }
