@@ -7,11 +7,11 @@ import { EnvVars } from './Constants'
 export default class Options extends null {
   public static defaultOptions (): IDefaultOptions {
     return {
-      env: Options.sanitizedEnvs()
+      env: Options.sanitizedEnvironmentVariables()
     }
   }
 
-  private static sanitizedEnvs (envVars: string[] = EnvVars) {
+  private static sanitizedEnvironmentVariables (envVars: string[] = EnvVars) {
     const envs = {} as IDefaultOptions['env']
 
     for (const [key, value] of Object.entries(pick(process.env, envVars))) {
