@@ -18,7 +18,7 @@ export default abstract class Command {
   public client: Nocronok
   public logger: Logger
   public data: SlashCommandBuilder
-  public abstract execute(context: Context): unknown
+  public abstract execute(context: Context): any
 
   constructor (client: Nocronok, options: ICommandOptions = {}) {
     this.commandOptions = optionHandler('Command', options)
