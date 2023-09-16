@@ -1,14 +1,18 @@
-import type { CommandInteraction } from 'discord.js'
+import type { ChatInputCommandInteraction, CommandInteraction } from 'discord.js'
 
-export interface ICommandRequirementsOptions {}
+export interface ICommandRequirementsOptions {
+  developersOnly?: boolean
+}
 
 export interface ICommandRequirementsParsedOptions
   extends ICommandRequirementsOptions {
-  errors: { [key: string]: string }
+  errors: { [K in keyof ICommandRequirementsOptions]: string }
 }
 
-export interface ICommandOptions {}
+export interface ICommandOptions {
+  requirements?: ICommandRequirementsOptions
+}
 
 export interface ICommandContextOptions {
-  interaction: CommandInteraction
+  interaction: CommandInteraction & ChatInputCommandInteraction
 }

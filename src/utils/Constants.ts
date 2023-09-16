@@ -3,6 +3,11 @@ import { EEnvironmentVariables } from '@enums'
 export const EnvVars = Object.keys(EEnvironmentVariables)
 
 export const Errors = {
+  Command: {
+    Requirements: {
+      DEVELOPERS_ONLY: 'Only the bot developers can to that'
+    }
+  },
   Loaders: {
     HttpLoader: {
       PORT_IS_NOT_SET:

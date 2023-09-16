@@ -1,4 +1,5 @@
 import type {
+  ChatInputCommandInteraction,
   CommandInteraction,
   Guild,
   GuildMember,
@@ -9,7 +10,7 @@ import type {
 import { ICommandContextOptions } from '@interfaces'
 
 export default class Context {
-  public interaction: CommandInteraction
+  public interaction: CommandInteraction & ChatInputCommandInteraction
   public guild: Guild | null
   public channel: TextBasedChannel | null
   public member: GuildMember | any

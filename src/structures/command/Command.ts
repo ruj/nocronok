@@ -1,14 +1,20 @@
 import type { SlashCommandBuilder } from 'discord.js'
 import type { Logger } from 'pino'
 
-import { ICommandOptions, IOptionHandler } from '@interfaces'
+import {
+  ICommandOptions,
+  ICommandRequirementsOptions,
+  IOptionHandler
+} from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { optionHandler } from '@utils'
 
 import Context from './Context'
+import Requirements from './Requirements'
 
 export default abstract class Command {
   private commandOptions: IOptionHandler
+  public requirements?: ICommandRequirementsOptions
   public client: Nocronok
   public logger: Logger
   public data: SlashCommandBuilder
@@ -16,6 +22,8 @@ export default abstract class Command {
 
   constructor (client: Nocronok, options: ICommandOptions = {}) {
     this.commandOptions = optionHandler('Command', options)
+
+    this.requirements = this.commandOptions.optional('requirements')
 
     this.client = client
     this.logger = client.logger
@@ -25,10 +33,17 @@ export default abstract class Command {
 
   public async executeCommand (context: Context) {
     try {
+      await this.handleRequirements(context)
       await this.execute(context)
     } catch (error) {
       this.error(context, error)
     }
+  }
+
+  private handleRequirements (context: Context) {
+    return this.requirements
+      ? Requirements.handle(context, this.requirements)
+      : true
   }
 
   private async error ({ interaction }: Context, error: any) {

@@ -1,4 +1,8 @@
-import type { CommandInteraction, TextChannel } from 'discord.js'
+import type {
+  ChatInputCommandInteraction,
+  CommandInteraction,
+  TextChannel
+} from 'discord.js'
 
 import type Nocronok from '@structures/base/Nocronok'
 import { Context } from '@structures/command'
@@ -13,7 +17,9 @@ export default class InteractionCreate extends Listener {
     this.commands = client.commands
   }
 
-  public async onInteractionCreate (interaction: CommandInteraction) {
+  public async onInteractionCreate (
+    interaction: CommandInteraction & ChatInputCommandInteraction
+  ) {
     if (!interaction.isCommand()) return false
     if (!interaction.guildId || !interaction.channelId) return false
     if (!interaction.client.guilds.cache.get(interaction.guildId)) return false
