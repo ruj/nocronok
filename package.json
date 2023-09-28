@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "yarn migrate:deploy && yarn clean && yarn build:src",
+    "build": "yarn clean && yarn build:src",
     "build:src": "tsc && tsc-alias -p tsconfig.json",
     "start": "node -r dotenv/config dist/index.js",
     "start:dev": "nodemon src/index.ts",
