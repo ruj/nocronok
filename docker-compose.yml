@@ -17,3 +17,28 @@ services:
     ports:
       - ${PORT}:${PORT}
     command: yarn start
+    networks:
+      - intranet
+  mysql:
+    container_name: mysql
+    build:
+      context: .
+      dockerfile: /docker/mysql/Dockerfile
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    env_file:
+      - .env
+    expose:
+      - ${DATABASE_PORT}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+    networks:
+      - intranet
+
+networks:
+  intranet:
+    driver: bridge
