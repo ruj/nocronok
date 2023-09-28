@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client'
 import { Client, GatewayIntentBits } from 'discord.js'
 
 import { IDefaultOptions } from '@interfaces'
@@ -11,6 +12,7 @@ export default class Nocronok extends Client {
   public defaultOptions: IDefaultOptions
   public apis: { [key: string]: any }
   public commands: Map<string, any>
+  public prisma: PrismaClient
 
   constructor () {
     super({
@@ -22,6 +24,7 @@ export default class Nocronok extends Client {
 
     this.apis = {}
     this.commands = new Map()
+    this.prisma = new PrismaClient()
 
     this.initializeLoaders()
   }
