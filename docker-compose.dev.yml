@@ -14,8 +14,6 @@ services:
       dockerfile: /docker/mysql/Dockerfile
     volumes:
       - ./docker/mysql/data:/var/lib/mysql
-    env_file:
-      - .env
     expose:
       - ${DATABASE_PORT}
     ports:
