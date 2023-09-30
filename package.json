@@ -6,12 +6,12 @@
     "build": "yarn clean && yarn build:src",
     "build:src": "tsc && tsc-alias -p tsconfig.json",
     "start": "node -r dotenv/config dist/index.js",
-    "start:dev": "dotenv -v DOTENV_CONFIG_PATH=.env.development nodemon src/index.ts",
-    "dev:database-url": "pwsh -ExecutionPolicy ByPass -NoProfile -Command \"pnpm exec dotenv -v DATABASE_URL=$(pnpm exec dotenv -e .env.development ts-node -r dotenv/config ./scripts/getLocalhostDatabaseUrl.ts localhost)\"",
-    "migrate:dev": "yarn dev:database-url prisma migrate dev",
-    "migrate:dev:status": "yarn dev:database-url pnpm run migrate:status",
-    "migrate:deploy": "prisma migrate deploy",
-    "migrate:status": "prisma migrate status"
+    "start:dev": "nodemon src/index.ts",
+    "prod:database-url": "pwsh -ExecutionPolicy ByPass -NoProfile -Command \"pnpm exec dotenv -v DATABASE_URL=$(pnpm exec dotenv -e .env.production ts-node -r dotenv/config ./scripts/getDatabaseUrl.ts)\"",
+    "migrate:deploy": "yarn prod:database-url prisma migrate deploy",
+    "migrate:status": "yarn prod:database-url pnpm run migrate:dev:status",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:dev:status": "prisma migrate status"
   },
   "license": "BSD-4-Clause",
   "dependencies": {
