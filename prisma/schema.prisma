@@ -16,3 +16,10 @@ model Config {
 
   @@map("config")
 }
+
+model User {
+  id         String   @id @unique
+  created_at DateTime @default(now())
+
+  @@map("users")
+}
