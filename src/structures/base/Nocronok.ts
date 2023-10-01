@@ -19,7 +19,7 @@ export default class Nocronok extends Client {
       intents: [GatewayIntentBits.Guilds]
     })
 
-    this.logger = logger({ prettyPrint: true })
+    this.logger = logger({ prettyPrint: !process.env.NODE_ENV })
     this.defaultOptions = Options.defaultOptions()
 
     this.apis = {}
