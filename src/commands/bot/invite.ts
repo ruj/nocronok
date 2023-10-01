@@ -1,4 +1,4 @@
-import { OAuth2Scopes, PermissionFlagsBits } from 'discord.js'
+import { OAuth2Scopes, PermissionFlagsBits, hyperlink } from 'discord.js'
 
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, Context, SlashCommandBuilder } from '@structures/command'
@@ -64,6 +64,6 @@ export default class Invite extends Command {
       scopes: [OAuth2Scopes.Bot]
     })
 
-    return await interaction.reply(`[Invite Link](${inviteLink})`)
+    return await interaction.reply(hyperlink('Invite Link', inviteLink))
   }
 }
