@@ -5,6 +5,7 @@ import {
   Embed,
   SlashCommandBuilder
 } from '@structures/command'
+import { blank } from '@utils'
 
 export default class Guild extends Command {
   constructor (client: Nocronok) {
@@ -83,7 +84,7 @@ export default class Guild extends Command {
           ].join('\n')
         },
         {
-          name: ' ',
+          name: blank(),
           value: [
             `${polyglot.t('commands.guild.boosts')}: ${
               guild?.premiumSubscriptionCount

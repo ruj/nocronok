@@ -16,6 +16,8 @@ type CamelizeObject = {
   [key: string]: any
 }
 
+export const blank = (length: number = 1) => '\xa0'.repeat(length)
+
 export const camelize = (object: CamelizeObject): CamelizeObject =>
   transform(object, (accumulator, currentValue, key, target) => {
     const camelKey = !isArray(target) ? camelCase(key as string) : key
