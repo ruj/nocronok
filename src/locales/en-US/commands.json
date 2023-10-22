@@ -1,0 +1,27 @@
+{
+  "guild": {
+    "information": "Information",
+    "id": "ID",
+    "acronym": "Acronym",
+    "created": "Created",
+    "owner": "Owner",
+    "moderation": "Moderation",
+    "afk_channel": "AFK Channel",
+    "afk_timeout": "AFK Timeout",
+    "mfa_level": "MFA",
+    "content_filter": "Content Filter",
+    "verification": "Verification",
+    "channels": "Channels",
+    "system": "System",
+    "widget": "Widget",
+    "counts": "Counts",
+    "members": "Members",
+    "emojis": "Emojis",
+    "static": "Static",
+    "animated": "Animated",
+    "boosts": "Boosts",
+    "roles": "Roles",
+    "unmanaged": "Unmanaged",
+    "managed": "Managed"
+  }
+}
