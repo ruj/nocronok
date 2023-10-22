@@ -1,3 +1,4 @@
 {
-  "generic": "An error occurred"
+  "generic": "An error occurred",
+  "developersOnly": "Only the bot developers can to that"
 }

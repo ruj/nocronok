@@ -1,10 +1,10 @@
 import type { GuildMember } from 'discord.js'
+import type Polyglot from 'node-polyglot'
 
 import {
   ICommandRequirementsOptions,
   ICommandRequirementsParsedOptions
 } from '@interfaces'
-import { Errors } from '@utils/Constants'
 import Options from '@utils/Options'
 
 export default class Requirements {
@@ -15,13 +15,13 @@ export default class Requirements {
       developersOnly: !!options.developersOnly,
 
       errors: {
-        developersOnly: Errors.Command.Requirements.DEVELOPERS_ONLY
+        developersOnly: 'errors.developersOnly'
       }
     }
   }
 
   public static async handle (
-    { member }: { member: GuildMember },
+    { member, polyglot }: { member: GuildMember; polyglot: Polyglot },
     requirementsOptions: ICommandRequirementsOptions
   ) {
     const options = Requirements.parseOptions(requirementsOptions)
@@ -31,7 +31,7 @@ export default class Requirements {
       const isDeveloper = defaultOptions.env.DEVELOPERS_ID?.includes(member.id)
 
       if (!isDeveloper) {
-        throw new Error(options.errors.developersOnly)
+        throw new Error(polyglot.t(options.errors.developersOnly!))
       }
     }
   }
