@@ -31,6 +31,8 @@ export default class InteractionCreate extends Listener {
       const command = this.commands.get(commandName)
       const context = new Context({ interaction })
 
+      context.setPolyglot(this.client.polyglots.get(guild?.preferredLocale!)!)
+
       this.logger.debug(
         { labels: ['Listener', 'interactionCreate'] },
         `/${commandName} run by ${

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import { Client, GatewayIntentBits } from 'discord.js'
+import Polyglot from 'node-polyglot'
 
 import { IDefaultOptions } from '@interfaces'
 import loaders from '@loaders'
@@ -12,6 +13,7 @@ export default class Nocronok extends Client {
   public defaultOptions: IDefaultOptions
   public apis: { [key: string]: any }
   public commands: Map<string, any>
+  public polyglots: Map<string, Polyglot>
   public prisma: PrismaClient
 
   constructor () {
@@ -24,6 +26,7 @@ export default class Nocronok extends Client {
 
     this.apis = {}
     this.commands = new Map()
+    this.polyglots = {} as Map<string, Polyglot>
     this.prisma = new PrismaClient()
 
     this.initializeLoaders()
