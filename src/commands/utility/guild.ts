@@ -34,6 +34,9 @@ export default class Guild extends Command {
           value: [
             `${polyglot.t('commands.guild.id')}: ${guild?.id}`,
             `${polyglot.t('commands.guild.acronym')}: ${guild?.nameAcronym}`,
+            `${polyglot.t('commands.guild.verified')}: ${polyglot.t(
+              guild?.verified ? 'commons.yes' : 'commons.no'
+            )}`,
             `${polyglot.t('commands.guild.created')}: ${guild?.createdAt}`,
             `${polyglot.t(
               'commands.guild.owner'
