@@ -80,6 +80,9 @@ export default class Guild extends Command {
           name: polyglot.t('commands.guild.counts'),
           value: [
             `${polyglot.t('commands.guild.members')}: ${guild?.memberCount}`,
+            `${polyglot.t(
+              'commands.guild.maximum_members'
+            )}: ${guild?.maximumMembers}`,
             `${polyglot.t('commands.guild.emojis')}: ${emojis?.size}`,
             `- [${polyglot.t('commands.guild.static')}]: ${emojis?.filter(
               ({ animated }) => !animated
