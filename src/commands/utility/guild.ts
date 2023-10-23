@@ -66,6 +66,11 @@ export default class Guild extends Command {
               guild?.widgetChannel
                 ? guild.widgetChannel
                 : polyglot.t('commons.none')
+            }`,
+            `${polyglot.t('commands.guild.rules')}: ${
+              guild?.rulesChannelId
+                ? guild.rulesChannel
+                : polyglot.t('commons.none')
             }`
           ].join('\n'),
           inline: false
