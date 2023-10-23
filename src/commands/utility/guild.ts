@@ -37,7 +37,8 @@ export default class Guild extends Command {
             `${polyglot.t('commands.guild.created')}: ${guild?.createdAt}`,
             `${polyglot.t(
               'commands.guild.owner'
-            )}: ${await guild?.fetchOwner()}`
+            )}: ${await guild?.fetchOwner()}`,
+            `${polyglot.t('commands.guild.locale')}: ${guild?.preferredLocale}`
           ].join('\n')
         },
         {

@@ -5,6 +5,7 @@
     "acronym": "Acronym",
     "created": "Created",
     "owner": "Owner",
+    "locale": "Locale",
     "moderation": "Moderation",
     "afk_channel": "AFK Channel",
     "afk_timeout": "AFK Timeout",
