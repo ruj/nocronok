@@ -110,7 +110,9 @@ export default class Guild extends Command {
               roles?.size
                 ? roles.filter(({ editable }) => editable).size - 1
                 : 0
-            }`
+            }`,
+            `${polyglot.t('commands.guild.stickers')}: ${guild?.stickers.cache
+              .size}`
           ].join('\n')
         }
       ].map((field) =>
