@@ -45,6 +45,21 @@ export default class Guild extends Command {
           ].join('\n')
         },
         {
+          name: polyglot.t('commands.guild.premium'),
+          value: [
+            `${polyglot.t('commands.guild.tier')} ${guild?.premiumTier}`,
+            `${polyglot.t('commands.guild.boosts')}: ${
+              guild?.premiumSubscriptionCount
+                ? guild.premiumSubscriptionCount
+                : 0
+            }${
+              guild?.premiumTier! < 3
+                ? `/${this.maximumBoostForEachPremiumTier[guild?.premiumTier!]}`
+                : ''
+            }`
+          ].join('\n')
+        },
+        {
           name: polyglot.t('commands.guild.moderation'),
           value: [
             `${polyglot.t('commands.guild.afk_channel')}: ${
@@ -98,11 +113,6 @@ export default class Guild extends Command {
         {
           name: blank(),
           value: [
-            `${polyglot.t('commands.guild.boosts')}: ${
-              guild?.premiumSubscriptionCount
-                ? guild.premiumSubscriptionCount
-                : 0
-            }`,
             `${polyglot.t('commands.guild.roles')}: ${
               roles?.size ? roles.size - 1 : 0
             }`,
@@ -124,5 +134,14 @@ export default class Guild extends Command {
     )
 
     return await interaction.reply({ embeds: [embed] })
+  }
+
+  private get maximumBoostForEachPremiumTier () {
+    return {
+      0: 2,
+      1: 7,
+      2: 14,
+      3: null
+    }
   }
 }
