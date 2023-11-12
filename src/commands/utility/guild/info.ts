@@ -20,25 +20,29 @@ export default abstract class GuildInfo extends Command {
     embed.setTitle(guild?.name!).addFields(
       [
         {
-          name: polyglot.t('commands.guild.information'),
+          name: polyglot.t('commands.guild.info.information'),
           value: [
-            `${polyglot.t('commands.guild.id')}: ${guild?.id}`,
-            `${polyglot.t('commands.guild.acronym')}: ${guild?.nameAcronym}`,
-            `${polyglot.t('commands.guild.verified')}: ${polyglot.t(
+            `${polyglot.t('commands.guild.info.id')}: ${guild?.id}`,
+            `${polyglot.t(
+              'commands.guild.info.acronym'
+            )}: ${guild?.nameAcronym}`,
+            `${polyglot.t('commands.guild.info.verified')}: ${polyglot.t(
               guild?.verified ? 'commons.yes' : 'commons.no'
             )}`,
-            `${polyglot.t('commands.guild.created')}: ${guild?.createdAt}`,
+            `${polyglot.t('commands.guild.info.created')}: ${guild?.createdAt}`,
             `${polyglot.t(
-              'commands.guild.owner'
+              'commands.guild.info.owner'
             )}: ${await guild?.fetchOwner()}`,
-            `${polyglot.t('commands.guild.locale')}: ${guild?.preferredLocale}`
+            `${polyglot.t(
+              'commands.guild.info.locale'
+            )}: ${guild?.preferredLocale}`
           ].join('\n')
         },
         {
-          name: polyglot.t('commands.guild.premium'),
+          name: polyglot.t('commands.guild.info.premium'),
           value: [
-            `${polyglot.t('commands.guild.tier')} ${guild?.premiumTier}`,
-            `${polyglot.t('commands.guild.boosts')}: ${
+            `${polyglot.t('commands.guild.info.tier')} ${guild?.premiumTier}`,
+            `${polyglot.t('commands.guild.info.boosts')}: ${
               guild?.premiumSubscriptionCount
                 ? guild.premiumSubscriptionCount
                 : 0
@@ -50,33 +54,39 @@ export default abstract class GuildInfo extends Command {
           ].join('\n')
         },
         {
-          name: polyglot.t('commands.guild.moderation'),
+          name: polyglot.t('commands.guild.info.moderation'),
           value: [
-            `${polyglot.t('commands.guild.afk_channel')}: ${
+            `${polyglot.t('commands.guild.info.afk_channel')}: ${
               guild?.afkChannelId
                 ? guild.afkChannel
                 : polyglot.t('commons.none')
             }`,
-            `${polyglot.t('commands.guild.afk_timeout')}: ${guild?.afkTimeout}`,
-            `${polyglot.t('commands.guild.mfa_level')}: ${guild?.mfaLevel}`,
             `${polyglot.t(
-              'commands.guild.content_filter'
+              'commands.guild.info.afk_timeout'
+            )}: ${guild?.afkTimeout}`,
+            `${polyglot.t(
+              'commands.guild.info.mfa_level'
+            )}: ${guild?.mfaLevel}`,
+            `${polyglot.t(
+              'commands.guild.info.content_filter'
             )}: ${guild?.explicitContentFilter}`,
             `${polyglot.t(
-              'commands.guild.verification'
+              'commands.guild.info.verification'
             )}: ${guild?.verificationLevel}`
           ].join('\n')
         },
         {
-          name: polyglot.t('commands.guild.channels'),
+          name: polyglot.t('commands.guild.info.channels'),
           value: [
-            `${polyglot.t('commands.guild.system')}: ${guild?.systemChannel}`,
-            `${polyglot.t('commands.guild.widget')}: ${
+            `${polyglot.t(
+              'commands.guild.info.system'
+            )}: ${guild?.systemChannel}`,
+            `${polyglot.t('commands.guild.info.widget')}: ${
               guild?.widgetChannel
                 ? guild.widgetChannel
                 : polyglot.t('commons.none')
             }`,
-            `${polyglot.t('commands.guild.rules')}: ${
+            `${polyglot.t('commands.guild.info.rules')}: ${
               guild?.rulesChannelId
                 ? guild.rulesChannel
                 : polyglot.t('commons.none')
@@ -85,37 +95,39 @@ export default abstract class GuildInfo extends Command {
           inline: false
         },
         {
-          name: polyglot.t('commands.guild.counts'),
+          name: polyglot.t('commands.guild.info.counts'),
           value: [
-            `${polyglot.t('commands.guild.members')}: ${guild?.memberCount}`,
             `${polyglot.t(
-              'commands.guild.maximum_members'
+              'commands.guild.info.members'
+            )}: ${guild?.memberCount}`,
+            `${polyglot.t(
+              'commands.guild.info.maximum_members'
             )}: ${guild?.maximumMembers}`,
-            `${polyglot.t('commands.guild.emojis')}: ${emojis?.size}`,
-            `- [${polyglot.t('commands.guild.static')}]: ${emojis?.filter(
+            `${polyglot.t('commands.guild.info.emojis')}: ${emojis?.size}`,
+            `- [${polyglot.t('commands.guild.info.static')}]: ${emojis?.filter(
               ({ animated }) => !animated
             ).size}`,
-            `- [${polyglot.t('commands.guild.animated')}]: ${emojis?.filter(
-              ({ animated }) => animated
-            ).size}`
+            `- [${polyglot.t(
+              'commands.guild.info.animated'
+            )}]: ${emojis?.filter(({ animated }) => animated).size}`
           ].join('\n')
         },
         {
           name: blank(),
           value: [
-            `${polyglot.t('commands.guild.roles')}: ${
+            `${polyglot.t('commands.guild.info.roles')}: ${
               roles?.size ? roles.size - 1 : 0
             }`,
-            `- [${polyglot.t('commands.guild.unmanaged')}]: ${roles?.filter(
-              ({ editable }) => !editable
-            ).size}`,
-            `- [${polyglot.t('commands.guild.managed')}]: ${
+            `- [${polyglot.t(
+              'commands.guild.info.unmanaged'
+            )}]: ${roles?.filter(({ editable }) => !editable).size}`,
+            `- [${polyglot.t('commands.guild.info.managed')}]: ${
               roles?.size
                 ? roles.filter(({ editable }) => editable).size - 1
                 : 0
             }`,
-            `${polyglot.t('commands.guild.stickers')}: ${guild?.stickers.cache
-              .size}`
+            `${polyglot.t('commands.guild.info.stickers')}: ${guild?.stickers
+              .cache.size}`
           ].join('\n')
         }
       ].map((field) =>
