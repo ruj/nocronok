@@ -10,6 +10,9 @@ export default abstract class Guild extends ParentCommand {
     .setName('guild')
     .setDescription('Shows details about the server')
     .addSubcommand((subcommand) =>
+      subcommand.setName('icon').setDescription('Display server icon')
+    )
+    .addSubcommand((subcommand) =>
       subcommand
         .setName('info')
         .setDescription('Shows detailed server information')

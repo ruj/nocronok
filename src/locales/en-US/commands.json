@@ -1,5 +1,8 @@
 {
   "guild": {
+    "icon": {
+      "no_icon": "Server does not have an icon"
+    },
     "info": {
       "information": "Information",
       "id": "ID",
