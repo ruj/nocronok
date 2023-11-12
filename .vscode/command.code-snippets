@@ -1,0 +1,18 @@
+{
+  "command": {
+    "prefix": ["cmd", "command"],
+    "body": [
+      "import type Nocronok from '@structures/base/Nocronok'",
+      "import { Command, Context } from '@structures/command'",
+      "",
+      "export default abstract class SnippetCommand extends Command {",
+      "\tconstructor (client: Nocronok) {",
+      "\t\tsuper(client, { name: '' })",
+      "\t}",
+      "",
+      "\tpublic async execute ({ interaction }: Context) {}",
+      "}"
+    ],
+    "description": "A command."
+  }
+}
