@@ -14,15 +14,22 @@ import Requirements from './Requirements'
 
 export default abstract class Command {
   private commandOptions: IOptionHandler
+  public name: string
+  public parent?: boolean
+  public parentName?: string
   public requirements?: ICommandRequirementsOptions
   public client: Nocronok
   public logger: Logger
   public data: SlashCommandBuilder
   public abstract execute(context: Context): any
+  public abstract preExecute(context: Context): any
 
-  constructor (client: Nocronok, options: ICommandOptions = {}) {
+  constructor (client: Nocronok, options: ICommandOptions) {
     this.commandOptions = optionHandler('Command', options)
 
+    this.name = this.commandOptions.required('name')
+    this.parent = this.commandOptions.default('parent', false)
+    this.parentName = this.commandOptions.optional('parentName')
     this.requirements = this.commandOptions.optional('requirements')
 
     this.client = client
@@ -34,7 +41,12 @@ export default abstract class Command {
   public async executeCommand (context: Context) {
     try {
       await this.handleRequirements(context)
-      await this.execute(context)
+
+      if (this.parent) {
+        await this.preExecute(context)
+      } else {
+        await this.execute(context)
+      }
     } catch (error) {
       this.error(context, error)
     }

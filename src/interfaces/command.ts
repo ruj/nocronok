@@ -1,4 +1,7 @@
-import type { ChatInputCommandInteraction, CommandInteraction } from 'discord.js'
+import type {
+  ChatInputCommandInteraction,
+  CommandInteraction
+} from 'discord.js'
 
 export interface ICommandRequirementsOptions {
   developersOnly?: boolean
@@ -10,6 +13,9 @@ export interface ICommandRequirementsParsedOptions
 }
 
 export interface ICommandOptions {
+  name: string
+  parent?: boolean
+  parentName?: string
   requirements?: ICommandRequirementsOptions
 }
 

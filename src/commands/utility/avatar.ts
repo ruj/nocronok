@@ -8,11 +8,11 @@ enum EAvatarType {
   SERVER = 'SERVER'
 }
 
-export default class Avatar extends Command {
+export default abstract class Avatar extends Command {
   avatarOptions: ImageURLOptions
 
   constructor (client: Nocronok) {
-    super(client)
+    super(client, { name: 'avatar' })
 
     this.avatarOptions = { size: 4096 }
   }

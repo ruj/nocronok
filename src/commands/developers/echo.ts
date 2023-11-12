@@ -1,9 +1,9 @@
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, Context, SlashCommandBuilder } from '@structures/command'
 
-export default class Echo extends Command {
+export default abstract class Echo extends Command {
   constructor (client: Nocronok) {
-    super(client, { requirements: { developersOnly: true } })
+    super(client, { name: 'echo', requirements: { developersOnly: true } })
   }
 
   public static data = new SlashCommandBuilder()

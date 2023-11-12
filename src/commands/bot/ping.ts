@@ -1,9 +1,9 @@
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, Context, SlashCommandBuilder } from '@structures/command'
 
-export default class Ping extends Command {
+export default abstract class Ping extends Command {
   constructor (client: Nocronok) {
-    super(client)
+    super(client, { name: 'ping' })
   }
 
   public static data = new SlashCommandBuilder()

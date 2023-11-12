@@ -4,9 +4,9 @@ import type Nocronok from '@structures/base/Nocronok'
 import { Command, Context, SlashCommandBuilder } from '@structures/command'
 import { camelize } from '@utils'
 
-export default class Iss extends Command {
+export default abstract class Iss extends Command {
   constructor (client: Nocronok) {
-    super(client)
+    super(client, { name: 'iss' })
   }
 
   public static data = new SlashCommandBuilder()

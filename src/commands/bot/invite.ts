@@ -3,9 +3,9 @@ import { OAuth2Scopes, PermissionFlagsBits, hyperlink } from 'discord.js'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, Context, SlashCommandBuilder } from '@structures/command'
 
-export default class Invite extends Command {
+export default abstract class Invite extends Command {
   constructor (client: Nocronok) {
-    super(client)
+    super(client, { name: 'invite' })
   }
 
   public static data = new SlashCommandBuilder()
