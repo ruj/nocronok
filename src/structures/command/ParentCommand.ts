@@ -16,7 +16,7 @@ export default abstract class ParentCommand extends Command {
       : null
 
     if (subcommandName && this.client.commands.has(subcommandName)) {
-      this.client.commands.get(subcommand).execute(context)
+      this.client.commands.get(subcommandName).execute(context)
     } else {
       this.execute(context)
     }
