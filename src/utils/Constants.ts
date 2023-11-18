@@ -12,3 +12,7 @@ export const Errors = {
     }
   }
 }
+
+export const SteamHttp = {
+  COMMUNITY: 'https://steamcommunity.com'
+}
