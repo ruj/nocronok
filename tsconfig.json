@@ -10,6 +10,7 @@
       "@interfaces": ["interfaces"],
       "@loaders": ["loaders"],
       "@structures/*": ["structures/*"],
+      "@types": ["types"],
       "@utils": ["utils"],
       "@utils/*": ["utils/*"]
     },

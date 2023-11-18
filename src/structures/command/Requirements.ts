@@ -1,10 +1,10 @@
 import type { GuildMember } from 'discord.js'
-import type Polyglot from 'node-polyglot'
 
 import {
   ICommandRequirementsOptions,
   ICommandRequirementsParsedOptions
 } from '@interfaces'
+import { PolyglotExtended } from '@types'
 import Options from '@utils/Options'
 
 export default class Requirements {
@@ -21,7 +21,7 @@ export default class Requirements {
   }
 
   public static async handle (
-    { member, polyglot }: { member: GuildMember; polyglot: Polyglot },
+    { member, polyglot }: { member: GuildMember; polyglot: PolyglotExtended },
     requirementsOptions: ICommandRequirementsOptions
   ) {
     const options = Requirements.parseOptions(requirementsOptions)
