@@ -6,9 +6,9 @@ import type {
   TextBasedChannel,
   User
 } from 'discord.js'
-import type Polyglot from 'node-polyglot'
 
 import { ICommandContextOptions } from '@interfaces'
+import { PolyglotExtended } from '@types'
 
 export default class Context {
   public interaction: CommandInteraction & ChatInputCommandInteraction
@@ -16,7 +16,7 @@ export default class Context {
   public channel: TextBasedChannel | null
   public member: GuildMember | any
   public user: User
-  public polyglot: Polyglot
+  public polyglot: PolyglotExtended
 
   constructor (options: ICommandContextOptions) {
     this.interaction = options.interaction
@@ -25,10 +25,10 @@ export default class Context {
     this.member = options.interaction.member
     this.user = options.interaction.user
 
-    this.polyglot = {} as Polyglot
+    this.polyglot = {} as PolyglotExtended
   }
 
-  setPolyglot (polyglot: Polyglot) {
+  setPolyglot (polyglot: PolyglotExtended) {
     this.polyglot = polyglot
   }
 }

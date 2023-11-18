@@ -1,7 +1,6 @@
-import Polyglot from 'node-polyglot'
-
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
+import Polyglot from '@structures/Polyglot'
 
 export default class LocaleLoader extends Loader {
   public locales: { [key: string]: any }

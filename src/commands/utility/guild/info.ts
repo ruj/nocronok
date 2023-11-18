@@ -26,8 +26,8 @@ export default abstract class GuildInfo extends Command {
             `${polyglot.t(
               'commands.guild.info.acronym'
             )}: ${guild?.nameAcronym}`,
-            `${polyglot.t('commands.guild.info.verified')}: ${polyglot.t(
-              guild?.verified ? 'commons.yes' : 'commons.no'
+            `${polyglot.t('commands.guild.info.verified')}: ${polyglot.yn(
+              guild?.verified!
             )}`,
             `${polyglot.t('commands.guild.info.created')}: ${guild?.createdAt}`,
             `${polyglot.t(
