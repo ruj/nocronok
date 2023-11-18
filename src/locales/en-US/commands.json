@@ -35,5 +35,18 @@
       "managed": "Managed",
       "stickers": "Stickers"
     }
+  },
+  "steam": {
+    "user": {
+      "level": "Level",
+      "status": "Status",
+      "privacy": "Privacy",
+      "vac": "VAC",
+      "trade_ban": "Trade Ban",
+      "limited": "Limited",
+      "community_ban": "Community Ban",
+      "profile_url": "Profile URL",
+      "profile_permalink": "Profile Permalink"
+    }
   }
 }
