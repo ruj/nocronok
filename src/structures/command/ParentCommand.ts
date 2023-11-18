@@ -10,15 +10,19 @@ export default abstract class ParentCommand extends Command {
   }
 
   public async preExecute (context: Context) {
-    const subcommand = context.interaction.options.getSubcommand()
-    const subcommandName = this.parent
-      ? [this.name, subcommand].join('.')
-      : null
+    try {
+      const subcommand = context.interaction.options.getSubcommand()
+      const subcommandName = this.parent
+        ? [this.name, subcommand].join('.')
+        : null
 
-    if (subcommandName && this.client.commands.has(subcommandName)) {
-      this.client.commands.get(subcommandName).execute(context)
-    } else {
-      this.execute(context)
+      if (subcommandName && this.client.commands.has(subcommandName)) {
+        await this.client.commands.get(subcommandName).execute(context)
+      } else {
+        await this.execute(context)
+      }
+    } catch (error) {
+      this.error(context, error)
     }
   }
 }

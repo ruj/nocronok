@@ -58,7 +58,7 @@ export default abstract class Command {
       : true
   }
 
-  private async error ({ interaction }: Context, error: any) {
+  public async error ({ interaction }: Context, error: any) {
     if (error instanceof Error) {
       await interaction.reply({ content: error.message, ephemeral: true })
     }
