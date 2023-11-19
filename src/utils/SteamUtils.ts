@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
-import { EPrivacyState } from '@enums'
+import { ESteamProfilePrivacyState } from '@enums'
 
 import { SteamHttp } from './Constants'
 import { GET } from './http'
@@ -52,7 +52,9 @@ export default class SteamUtils {
       location: profile.location || null,
       status: profile.stateMessage.replace(/<br\/>.*/, ''),
       privacy:
-        EPrivacyState[profile.privacyState as keyof typeof EPrivacyState],
+        ESteamProfilePrivacyState[
+          profile.privacyState as keyof typeof ESteamProfilePrivacyState
+        ],
       limitations: {
         vac: !!+profile.vacBanned,
         trade_ban: profile.tradeBanState !== 'None',
