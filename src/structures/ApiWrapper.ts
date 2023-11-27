@@ -18,4 +18,10 @@ export default class ApiWrapper {
   public load () {
     return this
   }
+
+  public buildQuery (parameters: { [key: string]: any }) {
+    return Object.entries(parameters)
+      .map((parameter) => parameter.join('='))
+      .join('&')
+  }
 }
