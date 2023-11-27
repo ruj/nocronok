@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource mysql {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Config {
@@ -18,8 +19,26 @@ model Config {
 }
 
 model User {
-  id         String   @id @unique
-  created_at DateTime @default(now())
+  id               String           @id @unique
+  created_at       DateTime         @default(now())
+  steam_player_ban SteamPlayerBan[]
 
   @@map("users")
+}
+
+model SteamPlayerBan {
+  id                  String   @id @unique
+  note                String?  @mysql.VarChar(250)
+  community_ban       Boolean  @default(false)
+  trade_ban           Boolean  @default(false)
+  vac_ban             Boolean  @default(false)
+  number_of_vac_bans  Int      @default(0)
+  game_ban            Boolean  @default(false)
+  number_of_game_bans Int      @default(0)
+  added_by            String
+  user                User     @relation(fields: [added_by], references: [id])
+  added_at            DateTime @default(now())
+
+  @@index([added_by])
+  @@map("steam_player_bans")
 }

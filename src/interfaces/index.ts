@@ -5,6 +5,7 @@ export * from './file'
 export * from './listener'
 export * from './option'
 export * from './route'
+export * from './steam'
 
 export interface IOptionHandler {
   default: (name: string, defaultValue: any | any[]) => any
