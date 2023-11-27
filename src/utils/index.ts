@@ -7,6 +7,7 @@ import transform from 'lodash/transform'
 import {
   IApiWrapperOptions,
   ICommandOptions,
+  ICronOptions,
   IListenerOptions,
   IOptionHandler,
   IRouteOptions
@@ -31,6 +32,7 @@ export const optionHandler = (
   options:
     | IApiWrapperOptions
     | ICommandOptions
+    | ICronOptions
     | IListenerOptions
     | IRouteOptions
 ): IOptionHandler => ({
