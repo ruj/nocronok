@@ -29,6 +29,7 @@ model User {
 model SteamPlayerBan {
   id                  String   @id @unique
   note                String?  @mysql.VarChar(250)
+  track               Boolean  @default(true)
   community_ban       Boolean  @default(false)
   trade_ban           Boolean  @default(false)
   vac_ban             Boolean  @default(false)

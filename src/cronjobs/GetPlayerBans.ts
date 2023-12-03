@@ -16,6 +16,7 @@ export default abstract class GetPlayerBans extends Cron {
   public onTick ({ client }: ICronJobContext) {
     return async () => {
       const playerBans = await client.prisma.steamPlayerBan.findMany({
+        where: { track: true },
         include: { user: true }
       })
       const { players } = camelize(
