@@ -15,6 +15,7 @@ model Config {
   value       String?
   description String?
 
+  @@unique([module, name])
   @@map("config")
 }
 
