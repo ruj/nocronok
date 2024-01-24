@@ -6,6 +6,7 @@ import { Embed } from '@structures/command'
 import Cron from '@structures/Cron'
 import Webhook from '@structures/Webhook'
 import { blank, camelize } from '@utils'
+import Mapper from '@utils/Mapper'
 import SteamUtils from '@utils/SteamUtils'
 
 export default abstract class GetPlayerBans extends Cron {
@@ -15,69 +16,128 @@ export default abstract class GetPlayerBans extends Cron {
 
   public onTick ({ client }: ICronJobContext) {
     return async () => {
-      const playerBans = await client.prisma.steamPlayerBan.findMany({
-        where: { track: true },
-        include: { user: true }
-      })
-      const { players } = camelize(
-        await client.apis.steam.getPlayerBans(
-          playerBans.map((playerBan) => playerBan.id)
-        )
-      ) as { players: ISteamPlayerBan[] }
+      try {
+        const banInterval = 1e3
+        const playerInterval = 2.5 * 1e3
 
-      if (players.length) {
-        players
-          .map((player) => {
-            const bans = []
-            const playerBan = playerBans.find(
-              (playerBan) => playerBan.id === player.steamId
+        const updateSteamPlayerBan = async (playerId: string, data: any) => {
+          try {
+            await client.prisma.steamPlayerBan.update({
+              where: { id: playerId },
+              data
+            })
+          } catch (error) {}
+        }
+
+        const playerBansFromDatabase =
+          await client.prisma.steamPlayerBan.findMany({
+            where: { track: true },
+            include: { user: true }
+          })
+
+        const { players: playerBansFromSteamApi } = camelize(
+          await client.apis.steam.getPlayerBans(
+            playerBansFromDatabase.map((playerBan) => playerBan.id)
+          )
+        ) as { players: ISteamPlayerBan[] }
+
+        // No new players punished
+        if (!playerBansFromSteamApi.length) {
+          return false
+        }
+
+        playerBansFromSteamApi
+          .map((playerBanFromSteamApi) => {
+            const bans: Mapper<ESteamPlayerBan, boolean> = new Mapper()
+            const playerBanFromDatabase = playerBansFromDatabase.find(
+              (playerBanFromDatabase) =>
+                playerBanFromDatabase.id === playerBanFromSteamApi.steamId
             )
 
-            if (player.communityBanned && !playerBan?.community_ban) {
-              bans.push(ESteamPlayerBan.COMMUNITY_BAN)
-            } else if (!player.communityBanned && playerBan?.community_ban) {
-              bans.push(ESteamPlayerBan.COMMUNITY_UNBAN)
+            if (
+              playerBanFromSteamApi.communityBanned &&
+              !playerBanFromDatabase?.community_ban
+            ) {
+              bans.set(ESteamPlayerBan.COMMUNITY_BAN, true)
+            } else if (
+              !playerBanFromSteamApi.communityBanned &&
+              playerBanFromDatabase?.community_ban
+            ) {
+              bans.set(ESteamPlayerBan.COMMUNITY_UNBAN, true)
             }
 
             if (
-              player.economyBan.toUpperCase() === 'BANNED' &&
-              !playerBan?.trade_ban
+              playerBanFromSteamApi.economyBan.toUpperCase() === 'BANNED' &&
+              !playerBanFromDatabase?.trade_ban
             ) {
-              bans.push(ESteamPlayerBan.TRADE_BAN)
+              bans.set(ESteamPlayerBan.TRADE_BAN, true)
             }
 
-            if (player.daysSinceLastBan === 0) {
+            if (playerBanFromSteamApi.daysSinceLastBan === 0) {
               if (
-                (player.vacBanned && !playerBan?.vac_ban) ||
-                player.numberOfVacBans > playerBan?.number_of_vac_bans!
+                (playerBanFromSteamApi.vacBanned &&
+                  !playerBanFromDatabase?.vac_ban) ||
+                playerBanFromSteamApi.numberOfGameBans >
+                  playerBanFromDatabase?.number_of_vac_bans!
               ) {
-                bans.push(ESteamPlayerBan.VAC_BAN)
+                bans.set(ESteamPlayerBan.VAC_BAN, true)
               }
 
               if (
-                (player.numberOfGameBans > 0 && !playerBan?.game_ban) ||
-                player.numberOfGameBans > playerBan?.number_of_game_bans!
+                (playerBanFromSteamApi.numberOfGameBans > 0 &&
+                  !playerBanFromDatabase?.game_ban) ||
+                playerBanFromSteamApi.numberOfGameBans >
+                  playerBanFromDatabase?.number_of_game_bans!
               ) {
-                bans.push(ESteamPlayerBan.GAME_BAN)
+                bans.set(ESteamPlayerBan.GAME_BAN, true)
               }
             }
 
             return {
-              steamId: player.steamId,
+              id: playerBanFromDatabase?.id!,
+              note: playerBanFromDatabase?.note as string | null,
               bans,
-              note: playerBan?.note,
-              addedAt: playerBan?.added_at,
-              addedBy: playerBan?.user
+              addedBy: camelize(playerBanFromDatabase?.user!),
+              addedAt: playerBanFromDatabase?.added_at
             }
           })
-          .filter(({ bans }) => bans.length)
-          .forEach((player, index) => {
+          .filter((player) => player.bans.size)
+          .forEach((player, playerIndex) => {
             setTimeout(
               async () => {
-                const playerProfile = await SteamUtils.findUser(player.steamId)
-                const addedBy = userMention(player.addedBy?.id!)
+                const profile = await SteamUtils.findUser(player.id)
+                const addedBy = userMention(player.addedBy.id)
+                const data: { [key: string]: any } = {}
 
-                player.bans.forEach((ban, index) => {
+                if (player.bans.has(ESteamPlayerBan.COMMUNITY_BAN)) {
+                  data.community_ban = player.bans.get(
+                    ESteamPlayerBan.COMMUNITY_BAN
+                  )
+                }
+
+                if (player.bans.has(ESteamPlayerBan.COMMUNITY_UNBAN)) {
+                  data.community_ban = !player.bans.get(
+                    ESteamPlayerBan.COMMUNITY_UNBAN
+                  )
+                }
+
+                if (player.bans.has(ESteamPlayerBan.TRADE_BAN)) {
+                  data.trade_ban = player.bans.get(ESteamPlayerBan.TRADE_BAN)
+                }
+
+                if (player.bans.has(ESteamPlayerBan.VAC_BAN)) {
+                  data.vac_ban = player.bans.get(ESteamPlayerBan.VAC_BAN)
+                  data.number_of_vac_bans = { increment: 1 }
+                }
+
+                if (player.bans.has(ESteamPlayerBan.GAME_BAN)) {
+                  data.game_ban = player.bans.get(ESteamPlayerBan.GAME_BAN)
+                  data.number_of_game_bans = { increment: 1 }
+                }
+
+                updateSteamPlayerBan(player.id, data)
+
+                player.bans.array().forEach(([ban], banIndex) => {
                   setTimeout(() => {
                     const webhook = new Webhook()
                     const embed = new Embed()
@@ -88,10 +148,10 @@ export default abstract class GetPlayerBans extends Cron {
 
                     embed
                       .setAuthor({
-                        name: playerProfile.name,
-                        url: SteamUtils.buildUserProfileLink(player.steamId)
+                        name: profile.name,
+                        url: SteamUtils.buildUserProfileLink(player.id)
                       })
-                      .setThumbnail(playerProfile.avatar_url.full)
+                      .setThumbnail(profile.avatar_url.full)
                       .addFields([
                         {
                           name: blank(),
@@ -107,13 +167,14 @@ export default abstract class GetPlayerBans extends Cron {
                       content: addedBy,
                       embeds: [embed]
                     })
-                  }, index * 1e3)
+                  }, banIndex * banInterval)
                 })
               },
-              index * player.bans.length * 1e3
+              playerIndex * player.bans.size * banInterval +
+                playerIndex * playerInterval
             )
           })
-      }
+      } catch (error) {}
     }
   }
 }
