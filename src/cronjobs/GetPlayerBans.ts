@@ -1,4 +1,5 @@
 import { userMention } from 'discord.js'
+import { replace, startCase } from 'lodash'
 
 import { ESteamPlayerBan } from '@enums'
 import { ICronJobContext, ISteamPlayerBan } from '@interfaces'
@@ -162,6 +163,7 @@ export default abstract class GetPlayerBans extends Cron {
                   setTimeout(() => {
                     const webhook = new Webhook()
                     const embed = new Embed()
+                    const friendlyBanName = startCase(replace(ban, /_/g, ' '))
 
                     if (player.note) {
                       embed.setDescription(player.note)
@@ -177,7 +179,7 @@ export default abstract class GetPlayerBans extends Cron {
                         {
                           name: blank(),
                           value: [
-                            `Banned by ${ban}`,
+                            `Banned by ${friendlyBanName}`,
                             `Added by ${addedBy}`
                           ].join('\n')
                         }
@@ -194,9 +196,11 @@ export default abstract class GetPlayerBans extends Cron {
                           {
                             labels: ['CronJobs', 'GetPlayerBans', 'webhook']
                           },
-                          `${profile.steam_id64} "${profile.name}" -- ${ban} (${
-                            banIndex + 1
-                          }/${arrayBans.length})`
+                          `${profile.steam_id64} "${
+                            profile.name
+                          }" -- ${friendlyBanName} (${banIndex + 1}/${
+                            arrayBans.length
+                          })`
                         )
                       )
                   }, banIndex * banInterval)
