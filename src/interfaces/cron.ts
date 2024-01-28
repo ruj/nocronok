@@ -1,3 +1,5 @@
+import type { Logger } from 'pino'
+
 import type Nocronok from '@structures/base/Nocronok'
 
 export interface ICronOptions {
@@ -9,4 +11,5 @@ export interface ICronOptions {
 
 export interface ICronJobContext {
   client: Nocronok
+  logger: Logger
 }

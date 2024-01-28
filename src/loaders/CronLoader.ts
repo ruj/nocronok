@@ -26,7 +26,10 @@ export default class CronLoader extends Loader {
     try {
       const cronJob = new CronJob(
         job.cronTime,
-        job.onTick({ client: this.client } as ICronJobContext),
+        job.onTick({
+          client: this.client,
+          logger: this.client.logger
+        } as ICronJobContext),
         job.onComplete,
         job.start,
         job.timeZone

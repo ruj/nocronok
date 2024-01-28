@@ -14,7 +14,7 @@ export default abstract class GetPlayerBans extends Cron {
     super({ cronTime: '0 * * * *' })
   }
 
-  public onTick ({ client }: ICronJobContext) {
+  public onTick ({ client, logger }: ICronJobContext) {
     return async () => {
       try {
         const banInterval = 1e3
@@ -26,7 +26,24 @@ export default abstract class GetPlayerBans extends Cron {
               where: { id: playerId },
               data
             })
-          } catch (error) {}
+
+            logger.info({
+              labels: ['CronJobs', 'GetPlayerBans', 'updateSteamPlayerBan()']
+            })
+          } catch (error) {
+            if (error instanceof Error) {
+              logger.error(
+                {
+                  labels: [
+                    'CronJobs',
+                    'GetPlayerBans',
+                    'updateSteamPlayerBan()'
+                  ]
+                },
+                error.message
+              )
+            }
+          }
         }
 
         const playerBansFromDatabase =
@@ -41,8 +58,12 @@ export default abstract class GetPlayerBans extends Cron {
           )
         ) as { players: ISteamPlayerBan[] }
 
-        // No new players punished
         if (!playerBansFromSteamApi.length) {
+          logger.debug(
+            { labels: ['CronJobs', 'GetPlayerBans'] },
+            `No new players punished (${playerBansFromDatabase.length})`
+          )
+
           return false
         }
 
@@ -137,7 +158,7 @@ export default abstract class GetPlayerBans extends Cron {
 
                 updateSteamPlayerBan(player.id, data)
 
-                player.bans.array().forEach(([ban], banIndex) => {
+                player.bans.array().forEach(([ban], banIndex, arrayBans) => {
                   setTimeout(() => {
                     const webhook = new Webhook()
                     const embed = new Embed()
@@ -163,10 +184,21 @@ export default abstract class GetPlayerBans extends Cron {
                       ])
                       .setFooter({ text: new Date(player.addedAt!).toString() })
 
-                    webhook.send({
-                      content: addedBy,
-                      embeds: [embed]
-                    })
+                    webhook
+                      .send({
+                        content: addedBy,
+                        embeds: [embed]
+                      })
+                      .then(() =>
+                        logger.info(
+                          {
+                            labels: ['CronJobs', 'GetPlayerBans', 'webhook']
+                          },
+                          `${profile.steam_id64} "${profile.name}" -- ${ban} (${
+                            banIndex + 1
+                          }/${arrayBans.length})`
+                        )
+                      )
                   }, banIndex * banInterval)
                 })
               },
