@@ -14,5 +14,8 @@ export const Errors = {
 }
 
 export const SteamHttp = {
-  COMMUNITY: 'https://steamcommunity.com'
+  COMMUNITY: 'https://steamcommunity.com',
+  EXTERNAL: {
+    STEAM_TRADES: 'https://steamtrades.com'
+  }
 }

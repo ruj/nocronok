@@ -12,6 +12,22 @@ export default class SteamUtils {
     return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
   }
 
+  public static buildSteamTradesProfileLink (user: string) {
+    if (
+      user.startsWith('STEAM_') ||
+      user.startsWith('765') ||
+      user.startsWith('[U:')
+    ) {
+      const steamId = new SteamID(user)
+
+      return steamId.isValid()
+        ? `${SteamHttp.EXTERNAL.STEAM_TRADES}/user/${steamId.toString()}`
+        : null
+    } else {
+      return 'Invalid User'
+    }
+  }
+
   public static async findUser (user: string) {
     const profileUrl = [
       SteamHttp.COMMUNITY,
