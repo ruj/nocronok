@@ -76,7 +76,16 @@ export default abstract class SteamUser extends Command {
               SteamUtils.buildUserProfileLink(user.steam_id64)
             )}`
           ].join('\n')
-        }
+        },
+        {
+          name: blank(),
+          value: [
+            hyperlink(
+              'SteamTrades',
+              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)!
+            )
+          ].join(' | ')
+        }!
       ])
       .setFooter({ text: new Date(user.member_since).toString() })
 
