@@ -82,7 +82,7 @@ export default abstract class SteamUser extends Command {
           value: [
             hyperlink(
               'SteamTrades',
-              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)!
+              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)
             )
           ].join(' | ')
         }!
