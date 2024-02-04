@@ -12,6 +12,13 @@ export default class SteamUtils {
     return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
   }
 
+  public static buildSteamRepProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_REP,
+      userId
+    ) as string
+  }
+
   public static buildSteamTradesProfileLink (userId: string) {
     return SteamUtils.generateThirdPartyServicePermalink(
       ESteamThirdPartyServices.STEAM_TRADES,
@@ -115,7 +122,11 @@ export default class SteamUtils {
 
     let pathPrefix: string
 
-    if (thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES) {
+    if (thirdPartyServiceName === ESteamThirdPartyServices.STEAM_REP) {
+      pathPrefix = 'profiles'
+    } else if (
+      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES
+    ) {
       pathPrefix = 'user'
     }
 
