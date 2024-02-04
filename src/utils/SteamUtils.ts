@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
-import { ESteamThirdPartyServices, ESteamProfilePrivacyState } from '@enums'
+import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
 
 import { SteamHttp } from './Constants'
 import { GET } from './http'
@@ -72,10 +72,7 @@ export default class SteamUtils {
       level: htmlProfile.level,
       location: profile.location || null,
       status: profile.stateMessage.replace(/<br\/>.*/, ''),
-      privacy:
-        ESteamProfilePrivacyState[
-          profile.privacyState as keyof typeof ESteamProfilePrivacyState
-        ],
+      privacy: SteamUtils.formatPrivacyState(profile.privacyState),
       limitations: {
         vac: !!+profile.vacBanned,
         trade_ban: profile.tradeBanState !== 'None',
@@ -119,7 +116,7 @@ export default class SteamUtils {
     )
   }
 
-  private static generateThirdPartyServicePermalink (
+  public static generateThirdPartyServicePermalink (
     thirdPartyServiceName: ESteamThirdPartyServices,
     userId: string | SteamID
   ) {
@@ -147,5 +144,18 @@ export default class SteamUtils {
         SteamHttp.THIRD_PARTY_SERVICE[thirdPartyServiceName]
       }/${pathPrefix!}/${userId.toString()}`
     )
+  }
+
+  public static formatPrivacyState (state: string) {
+    state = state.replace(/(\w)(only)/, '$1_$2')
+
+    switch (state.toUpperCase()) {
+      case ESteamProfilePrivacyStates.PUBLIC:
+        return 'Public'
+      case ESteamProfilePrivacyStates.FRIENDS_ONLY:
+        return 'Friends Only'
+      case ESteamProfilePrivacyStates.PRIVATE:
+        return 'Private'
+    }
   }
 }
