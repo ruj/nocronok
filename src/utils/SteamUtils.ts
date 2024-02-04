@@ -4,7 +4,7 @@ import { parseStringPromise } from 'xml2js'
 
 import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
 
-import { SteamHttp } from './Constants'
+import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
 import { GET } from './http'
 
 export default class SteamUtils {
@@ -141,7 +141,7 @@ export default class SteamUtils {
     return (
       userId.isValid() &&
       `${
-        SteamHttp.THIRD_PARTY_SERVICE[thirdPartyServiceName]
+        SteamThirdPartyServiceHttp[thirdPartyServiceName]
       }/${pathPrefix!}/${userId.toString()}`
     )
   }
