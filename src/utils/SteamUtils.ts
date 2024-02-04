@@ -2,7 +2,7 @@ import { load } from 'cheerio'
 import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
-import { ESteamProfilePrivacyState } from '@enums'
+import { ESteamThirdPartyServices, ESteamProfilePrivacyState } from '@enums'
 
 import { SteamHttp } from './Constants'
 import { GET } from './http'
@@ -12,20 +12,11 @@ export default class SteamUtils {
     return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
   }
 
-  public static buildSteamTradesProfileLink (user: string) {
-    if (
-      user.startsWith('STEAM_') ||
-      user.startsWith('765') ||
-      user.startsWith('[U:')
-    ) {
-      const steamId = new SteamID(user)
-
-      return steamId.isValid()
-        ? `${SteamHttp.EXTERNAL.STEAM_TRADES}/user/${steamId.toString()}`
-        : null
-    } else {
-      return 'Invalid User'
-    }
+  public static buildSteamTradesProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_TRADES,
+      userId
+    ) as string
   }
 
   public static async findUser (user: string) {
@@ -111,6 +102,28 @@ export default class SteamUtils {
 
     return new RegExp(
       `(?:https?:\\/\\/)?steamcommunity\\.com\\/((?:${subdirectory})\\/[a-zA-Z0-9_-]+)`
+    )
+  }
+
+  private static generateThirdPartyServicePermalink (
+    thirdPartyServiceName: ESteamThirdPartyServices,
+    userId: string | SteamID
+  ) {
+    if (!(userId instanceof SteamID)) {
+      userId = new SteamID(userId)
+    }
+
+    let pathPrefix: string
+
+    if (thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES) {
+      pathPrefix = 'user'
+    }
+
+    return (
+      userId.isValid() &&
+      `${
+        SteamHttp.THIRD_PARTY_SERVICE[thirdPartyServiceName]
+      }/${pathPrefix!}/${userId.toString()}`
     )
   }
 }
