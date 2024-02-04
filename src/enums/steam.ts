@@ -6,5 +6,6 @@ export enum ESteamProfilePrivacyState {
 
 export enum ESteamThirdPartyServices {
   STEAM_REP = 'STEAM_REP',
-  STEAM_TRADES = 'STEAM_TRADES'
+  STEAM_TRADES = 'STEAM_TRADES',
+  STEAM_LADDER = 'STEAM_LADDER'
 }

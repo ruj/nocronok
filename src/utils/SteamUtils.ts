@@ -26,6 +26,13 @@ export default class SteamUtils {
     ) as string
   }
 
+  public static buildSteamLadderProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_LADDER,
+      userId
+    ) as string
+  }
+
   public static async findUser (user: string) {
     const profileUrl = [
       SteamHttp.COMMUNITY,
@@ -128,6 +135,10 @@ export default class SteamUtils {
       thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES
     ) {
       pathPrefix = 'user'
+    } else if (
+      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_LADDER
+    ) {
+      pathPrefix = 'profile'
     }
 
     return (
