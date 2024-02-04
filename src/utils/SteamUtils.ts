@@ -69,7 +69,7 @@ export default class SteamUtils {
         medium: profile.avatarMedium,
         full: profile.avatarFull
       },
-      level: htmlProfile.level,
+      level: htmlProfile.level ?? 0,
       location: profile.location || null,
       status: profile.stateMessage.replace(/<br\/>.*/, ''),
       privacy: SteamUtils.formatPrivacyState(profile.privacyState),
