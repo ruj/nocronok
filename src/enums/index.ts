@@ -1,3 +1,4 @@
+export * from './loader'
 export * from './steam'
 
 export enum EEnvironmentVariables {

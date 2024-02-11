@@ -33,16 +33,26 @@ export default class Nocronok extends Client {
   }
 
   private async initializeLoaders () {
-    for (const name in loaders) {
-      const loader = new loaders[name as keyof typeof loaders](this)
+    let loaded: number = 0
+
+    for (const [loaderName, Loader] of loaders.entries()) {
+      const loader = new Loader(this)
 
       try {
         await loader.load()
+        loaded++
       } catch (error) {
         if (error instanceof Error) {
           this.logger.error(
-            { labels: ['initializeLoaders', name] },
+            { labels: ['initializeLoaders', loaderName] },
             error.message
+          )
+        }
+      } finally {
+        if (loaders.lastKey() === loaderName) {
+          this.logger.info(
+            { labels: ['initializeLoaders'] },
+            `Loaders have been loaded (${loaded}/${loaders.size})`
           )
         }
       }
