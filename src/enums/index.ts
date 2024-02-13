@@ -1,3 +1,4 @@
+export * from './currency'
 export * from './loader'
 export * from './steam'
 
