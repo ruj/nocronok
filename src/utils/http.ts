@@ -11,10 +11,21 @@ const defaultHeaders = {
   'Content-Type': 'application/json'
 }
 
-const response = <T>(response: any): Promise<T> =>
-  response.headers.get('Content-Type').startsWith('application/json')
-    ? (response.json() as Promise<{ data: T }>)
-    : response.text()
+const response = async <Type>(response: Response): Promise<Type> => {
+  const contentType = response.headers.get('Content-Type')
 
-export const GET = (path: string, headers: Headers = defaultHeaders) =>
-  fetch(path, { headers: merge(defaultHeaders, headers) }).then(response)
+  if (contentType && contentType.startsWith('application/json')) {
+    return response.json()
+  } else {
+    return response.text() as unknown as Type
+  }
+}
+
+export const GET = async <Type>(
+  path: string,
+  headers: Headers = defaultHeaders
+): Promise<Type> => {
+  return response<Type>(
+    await fetch(path, { headers: merge(defaultHeaders, headers) })
+  )
+}
