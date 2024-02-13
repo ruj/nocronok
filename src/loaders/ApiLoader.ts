@@ -19,22 +19,36 @@ export default class ApiLoader extends Loader {
 
   private async addApi (api: ApiWrapper) {
     if (
-      !api.envVars?.every((variable) => {
+      api.envVars &&
+      !api.envVars.every((variable) => {
         if (!process.env[variable]) {
           this.logger.warn(
             { labels: ['ApiLoader', 'addApi()'] },
             `${api.name} failed to load - Required environment variable "${variable}" is not set.`
           )
+
+          return false
         }
 
-        return !!process.env[variable]
+        return true
       })
     ) {
       return false
     }
 
-    this.client.apis[api.name] = await api.load()
+    try {
+      this.client.apis[api.name] = await api.load()
 
-    return true
+      return true
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        this.logger.error(
+          { labels: ['ApiLoader', 'addApi()'] },
+          `${api.name} failed to load - ${error.message}`
+        )
+      }
+
+      return false
+    }
   }
 }
