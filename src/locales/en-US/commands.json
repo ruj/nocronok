@@ -1,4 +1,10 @@
 {
+  "currency": {
+    "convert": {
+      "same_currency_code": "You are using the same currency code",
+      "is_approximately": "is approximately"
+    }
+  },
   "guild": {
     "icon": {
       "no_icon": "Server does not have an icon"

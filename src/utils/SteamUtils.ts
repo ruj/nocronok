@@ -2,9 +2,9 @@ import { load } from 'cheerio'
 import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
-import { ESteamProfilePrivacyState } from '@enums'
+import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
 
-import { SteamHttp } from './Constants'
+import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
 import { GET } from './http'
 
 export default class SteamUtils {
@@ -12,20 +12,25 @@ export default class SteamUtils {
     return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
   }
 
-  public static buildSteamTradesProfileLink (user: string) {
-    if (
-      user.startsWith('STEAM_') ||
-      user.startsWith('765') ||
-      user.startsWith('[U:')
-    ) {
-      const steamId = new SteamID(user)
+  public static buildSteamRepProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_REP,
+      userId
+    ) as string
+  }
 
-      return steamId.isValid()
-        ? `${SteamHttp.EXTERNAL.STEAM_TRADES}/user/${steamId.toString()}`
-        : null
-    } else {
-      return 'Invalid User'
-    }
+  public static buildSteamTradesProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_TRADES,
+      userId
+    ) as string
+  }
+
+  public static buildSteamLadderProfileLink (userId: string) {
+    return SteamUtils.generateThirdPartyServicePermalink(
+      ESteamThirdPartyServices.STEAM_LADDER,
+      userId
+    ) as string
   }
 
   public static async findUser (user: string) {
@@ -64,13 +69,10 @@ export default class SteamUtils {
         medium: profile.avatarMedium,
         full: profile.avatarFull
       },
-      level: htmlProfile.level,
+      level: htmlProfile.level ?? 0,
       location: profile.location || null,
       status: profile.stateMessage.replace(/<br\/>.*/, ''),
-      privacy:
-        ESteamProfilePrivacyState[
-          profile.privacyState as keyof typeof ESteamProfilePrivacyState
-        ],
+      privacy: SteamUtils.formatPrivacyState(profile.privacyState),
       limitations: {
         vac: !!+profile.vacBanned,
         trade_ban: profile.tradeBanState !== 'None',
@@ -112,5 +114,48 @@ export default class SteamUtils {
     return new RegExp(
       `(?:https?:\\/\\/)?steamcommunity\\.com\\/((?:${subdirectory})\\/[a-zA-Z0-9_-]+)`
     )
+  }
+
+  public static generateThirdPartyServicePermalink (
+    thirdPartyServiceName: ESteamThirdPartyServices,
+    userId: string | SteamID
+  ) {
+    if (!(userId instanceof SteamID)) {
+      userId = new SteamID(userId)
+    }
+
+    let pathPrefix: string
+
+    if (thirdPartyServiceName === ESteamThirdPartyServices.STEAM_REP) {
+      pathPrefix = 'profiles'
+    } else if (
+      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES
+    ) {
+      pathPrefix = 'user'
+    } else if (
+      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_LADDER
+    ) {
+      pathPrefix = 'profile'
+    }
+
+    return (
+      userId.isValid() &&
+      `${
+        SteamThirdPartyServiceHttp[thirdPartyServiceName]
+      }/${pathPrefix!}/${userId.toString()}`
+    )
+  }
+
+  public static formatPrivacyState (state: string) {
+    state = state.replace(/(\w)(only)/, '$1_$2')
+
+    switch (state.toUpperCase()) {
+      case ESteamProfilePrivacyStates.PUBLIC:
+        return 'Public'
+      case ESteamProfilePrivacyStates.FRIENDS_ONLY:
+        return 'Friends Only'
+      case ESteamProfilePrivacyStates.PRIVATE:
+        return 'Private'
+    }
   }
 }

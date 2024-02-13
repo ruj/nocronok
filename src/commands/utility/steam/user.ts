@@ -81,8 +81,16 @@ export default abstract class SteamUser extends Command {
           name: blank(),
           value: [
             hyperlink(
+              'SteamRep',
+              SteamUtils.buildSteamRepProfileLink(user.steam_id64)
+            ),
+            hyperlink(
               'SteamTrades',
-              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)!
+              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)
+            ),
+            hyperlink(
+              'SteamLadder',
+              SteamUtils.buildSteamLadderProfileLink(user.steam_id64)
             )
           ].join(' | ')
         }!

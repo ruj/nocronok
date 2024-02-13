@@ -25,6 +25,7 @@ export default class InteractionCreate extends Listener {
     if (!interaction.client.guilds.cache.get(interaction.guildId)) return false
 
     const commandName = interaction.commandName
+    const subCommandName = interaction.options.getSubcommand(false)
 
     if (this.commands.has(commandName)) {
       const { channel, guild, user } = interaction
@@ -35,7 +36,7 @@ export default class InteractionCreate extends Listener {
 
       this.logger.debug(
         { labels: ['Listener', 'interactionCreate'] },
-        `/${commandName} run by ${
+        `/${commandName}${subCommandName ? ` ${subCommandName}` : ''} run by ${
           !+user.discriminator ? user.username : user.tag
         } (${user.id}) on channel ${
           (channel as TextChannel).name
