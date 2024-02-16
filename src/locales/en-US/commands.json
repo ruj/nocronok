@@ -42,6 +42,21 @@
       "stickers": "Stickers"
     }
   },
+  "ip": {
+    "ip": "IP",
+    "hostname": "Hostname",
+    "anycast": "Anycast",
+    "city": "City",
+    "region": "Region",
+    "country": "Country",
+    "coordinates": {
+      "latitude": "Latitude",
+      "longitude": "Logitude"
+    },
+    "organization": "Organization",
+    "postal_code": "Postal code",
+    "timezone": "Timezone"
+  },
   "steam": {
     "user": {
       "level": "Level",

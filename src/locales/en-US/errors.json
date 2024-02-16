@@ -1,4 +1,9 @@
 {
   "generic": "An error occurred",
-  "developersOnly": "Only the bot developers can to that"
+  "developersOnly": "Only the bot developers can to that",
+  "commands": {
+    "ip": {
+      "invalid_ip": "IP address is not valid"
+    }
+  }
 }
