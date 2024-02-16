@@ -16,7 +16,9 @@ export default abstract class CurrencyConvert extends Command {
 
     if (fromCurrency === toCurrency) {
       return await interaction.reply({
-        content: polyglot.t('commands.currency.convert.same_currency_code'),
+        content: polyglot.t(
+          'errors.commands.currency.convert.same_currency_code'
+        ),
         ephemeral: true
       })
     }
