@@ -21,14 +21,14 @@ export default abstract class Currency extends ParentCommand {
         .setDescription('Currency conversion')
         .addStringOption((option) =>
           option
-            .setName('from_currency')
+            .setName('from')
             .setDescription('Currency code you want to convert')
             .addChoices(...choices)
             .setRequired(true)
         )
         .addStringOption((option) =>
           option
-            .setName('to_currency')
+            .setName('to')
             .setDescription('Currency code you want to convert to')
             .addChoices(...choices)
             .setRequired(true)
