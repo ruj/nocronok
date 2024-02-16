@@ -11,8 +11,8 @@ export default abstract class CurrencyConvert extends Command {
   }
 
   public async execute ({ interaction, polyglot }: Context) {
-    const fromCurrency = interaction.options.getString('from_currency')!
-    const toCurrency = interaction.options.getString('to_currency')!
+    const fromCurrency = interaction.options.getString('from')!
+    const toCurrency = interaction.options.getString('to')!
 
     if (fromCurrency === toCurrency) {
       return await interaction.reply({
