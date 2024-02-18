@@ -7,9 +7,14 @@ import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
 import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
 import { GET } from './http'
 
+export enum EIdentifierFormat {
+  SHORT = 'SHORT',
+  LONG = 'LONG'
+}
+
 export default class SteamUtils {
   public static buildUserProfileLink (user: string) {
-    return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
+    return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileIdentifier(user, EIdentifierFormat.LONG)}`
   }
 
   public static buildSteamRepProfileLink (userId: string) {
@@ -36,7 +41,7 @@ export default class SteamUtils {
   public static async findUser (user: string) {
     const profileUrl = [
       SteamHttp.COMMUNITY,
-      SteamUtils.hydrolyzeProfileUrl(user)
+      SteamUtils.hydrolyzeProfileIdentifier(user, EIdentifierFormat.LONG)
     ].join('/')
 
     const { profile } = await GET(profileUrl + '?xml=1').then((body) =>
@@ -85,24 +90,33 @@ export default class SteamUtils {
     return data
   }
 
-  public static hydrolyzeProfileUrl (value: string) {
-    const match = value.match(
+  public static hydrolyzeProfileIdentifier (
+    identifier: string,
+    format: EIdentifierFormat
+  ): string {
+    const match = identifier.match(
       SteamUtils.communitySubdirectoryRegex('id|profiles')
     )
-    const user = Array.isArray(match) ? match[1] : value
 
-    if (
-      user.startsWith('STEAM_') ||
-      user.startsWith('765') ||
-      user.startsWith('[U:')
-    ) {
-      const steamId = new SteamID(user)
+    identifier = Array.isArray(match) ? match[1] : identifier
 
-      return steamId.isValid() ? `profiles/${steamId.toString()}` : null
+    let result: string
+
+    if (/^(STEAM_|765|\[U:)/.test(identifier)) {
+      const steamId = new SteamID(identifier)
+
+      result = steamId.isValid() ? `profiles/${steamId.toString()}` : identifier
+    } else if (!/^(id\/|profiles\/)/.test(identifier)) {
+      result = `id/${identifier}`
     } else {
-      return !user.startsWith('id/') && !user.startsWith('profiles/')
-        ? `id/${user}`
-        : user
+      result = identifier
+    }
+
+    switch (format) {
+      case EIdentifierFormat.SHORT:
+        return result.replace(/^(id|profiles)\//, '')
+      case EIdentifierFormat.LONG:
+        return result
     }
   }
 
