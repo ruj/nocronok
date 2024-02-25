@@ -8,6 +8,7 @@ import {
 } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { optionHandler } from '@utils'
+import Environment from '@utils/Environment'
 
 import type Context from './Context'
 import Requirements from './Requirements'
@@ -64,7 +65,10 @@ export default abstract class Command {
     if (error instanceof Error) {
       await interaction.reply({ content: error.message, ephemeral: true })
 
-      this.logger.error({ labels: ['Command', 'execute'] }, error.message)
+      this.logger.error(
+        { labels: ['Command', 'execute'], ...(Environment.isDev() && error) },
+        error.message
+      )
     }
   }
 }
