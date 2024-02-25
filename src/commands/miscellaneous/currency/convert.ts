@@ -1,16 +1,19 @@
-import { bold } from 'discord.js'
+import { type InteractionResponse, bold } from 'discord.js'
 
 import { ECurrencySymbol } from '@enums'
 import type Nocronok from '@structures/base/Nocronok'
-import { Command, Context, Embed } from '@structures/command'
-import { blank, camelize } from '@utils'
+import { Command, type Context, Embed } from '@structures/command'
+import { blank } from '@utils'
 
 export default abstract class CurrencyConvert extends Command {
   constructor (client: Nocronok) {
     super(client, { name: 'convert', parentName: 'currency' })
   }
 
-  public async execute ({ interaction, polyglot }: Context) {
+  public async execute ({
+    interaction,
+    polyglot
+  }: Context): Promise<InteractionResponse<boolean>> {
     const fromCurrency = interaction.options.getString('from')!
     const toCurrency = interaction.options.getString('to')!
 
@@ -24,12 +27,10 @@ export default abstract class CurrencyConvert extends Command {
     }
 
     const amount = interaction.options.getNumber('amount')
-    const data = camelize(
-      await this.client.apis.exchangeRate.convert(
-        amount,
-        fromCurrency,
-        toCurrency
-      )
+    const data = await this.client.apis.exchangeRate.convert(
+      amount,
+      fromCurrency,
+      toCurrency
     )
 
     const fromCurrencySymbol = this.getCurrencySymbol(fromCurrency)

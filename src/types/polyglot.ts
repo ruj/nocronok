@@ -1,3 +1,3 @@
-import Polyglot from 'node-polyglot'
+import type Polyglot from 'node-polyglot'
 
-export type PolyglotExtended = Polyglot & { yn(condition: boolean): string }
+export type PolyglotExtended = Polyglot & { yn: (condition: boolean) => string }

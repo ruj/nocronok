@@ -7,8 +7,8 @@ import type {
   User
 } from 'discord.js'
 
-import { ICommandContextOptions } from '@interfaces'
-import { PolyglotExtended } from '@types'
+import { type ICommandContextOptions } from '@interfaces'
+import { type PolyglotExtended } from '@types'
 
 export default class Context {
   public interaction: CommandInteraction & ChatInputCommandInteraction
@@ -25,10 +25,10 @@ export default class Context {
     this.member = options.interaction.member
     this.user = options.interaction.user
 
-    this.polyglot = {} as PolyglotExtended
+    this.polyglot = {} as unknown as PolyglotExtended
   }
 
-  setPolyglot (polyglot: PolyglotExtended) {
+  setPolyglot (polyglot: PolyglotExtended): void {
     this.polyglot = polyglot
   }
 }

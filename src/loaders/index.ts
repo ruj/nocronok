@@ -17,7 +17,10 @@ export type LoaderType =
   | typeof ListenerLoader
   | typeof LocaleLoader
 
-export const loader: Loader = EnumUtils.convertCase(ELoader, EnumUtils.toPascal)
+export const loader: Loader = EnumUtils.convertCase(
+  ELoader,
+  EnumUtils.toPascal.bind(EnumUtils)
+)
 
 const loaders: Mapper<keyof Loader, LoaderType> = new Mapper<
   keyof Loader,

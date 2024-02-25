@@ -1,7 +1,8 @@
-import { hyperlink } from 'discord.js'
+import { type InteractionResponse, hyperlink } from 'discord.js'
 
+import { type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
-import { Command, Context, Embed } from '@structures/command'
+import { Command, type Context, Embed } from '@structures/command'
 import { blank } from '@utils'
 import SteamUtils from '@utils/SteamUtils'
 
@@ -10,8 +11,11 @@ export default abstract class SteamUser extends Command {
     super(client, { name: 'user', parentName: 'steam' })
   }
 
-  public async execute ({ interaction, polyglot }: Context) {
-    const user = await SteamUtils.findUser(
+  public async execute ({
+    interaction,
+    polyglot
+  }: Context): Promise<InteractionResponse<boolean>> {
+    const user: ISteamFindUser = await SteamUtils.findUser(
       interaction.options.getString('user')!
     )
 
@@ -24,9 +28,9 @@ export default abstract class SteamUser extends Command {
     embed
       .setAuthor({
         name: user.name,
-        url: SteamUtils.buildUserProfileLink(user.steam_id64)
+        url: SteamUtils.buildUserProfileLink(user.steamId64)
       })
-      .setThumbnail(user.avatar_url.full)
+      .setThumbnail(user.avatarUrl.full)
       .addFields([
         {
           name: blank(),
@@ -44,13 +48,13 @@ export default abstract class SteamUser extends Command {
               user.limitations.vac
             )}`,
             `${polyglot.t('commands.steam.user.trade_ban')}: ${polyglot.yn(
-              user.limitations.trade_ban
+              user.limitations.tradeBan
             )}`,
             `${polyglot.t('commands.steam.user.limited')}: ${polyglot.yn(
               user.limitations.limited
             )}`,
             `${polyglot.t('commands.steam.user.community_ban')}: ${polyglot.yn(
-              user.limitations.community_ban
+              user.limitations.communityBan
             )}`
           ].join('\n'),
           inline: true
@@ -58,22 +62,22 @@ export default abstract class SteamUser extends Command {
         {
           name: blank(),
           value: [
-            `Steam 3ID: ${user.steam_3id}`,
-            `Steam ID32: ${user.steam_id32}`,
-            `Steam ID64: ${user.steam_id64}`,
+            `Steam 3ID: ${user.steam3Id}`,
+            `Steam ID32: ${user.steamId32}`,
+            `Steam ID64: ${user.steamId64}`,
             `${polyglot.t('commands.steam.user.profile_url')}: ${
-              user.custom_url
+              user.customUrl
                 ? hyperlink(
-                    user.custom_url,
-                    SteamUtils.buildUserProfileLink(user.custom_url)
+                    user.customUrl,
+                    SteamUtils.buildUserProfileLink(user.customUrl)
                   )
                 : polyglot.t('commons.none')
             }`,
             `${polyglot.t(
               'commands.steam.user.profile_permalink'
             )}: ${hyperlink(
-              user.steam_id64,
-              SteamUtils.buildUserProfileLink(user.steam_id64)
+              user.steamId64,
+              SteamUtils.buildUserProfileLink(user.steamId64)
             )}`
           ].join('\n')
         },
@@ -82,20 +86,23 @@ export default abstract class SteamUser extends Command {
           value: [
             hyperlink(
               'SteamRep',
-              SteamUtils.buildSteamRepProfileLink(user.steam_id64)
+              SteamUtils.buildSteamRepProfileLink(user.steamId64)
             ),
             hyperlink(
               'SteamTrades',
-              SteamUtils.buildSteamTradesProfileLink(user.steam_id64)
+              SteamUtils.buildSteamTradesProfileLink(user.steamId64)
             ),
             hyperlink(
               'SteamLadder',
-              SteamUtils.buildSteamLadderProfileLink(user.steam_id64)
+              SteamUtils.buildSteamLadderProfileLink(user.steamId64)
             )
           ].join(' | ')
-        }!
+        }
       ])
-      .setFooter({ text: new Date(user.member_since).toString() })
+
+    if (user.memberSince) {
+      embed.setFooter({ text: new Date(user.memberSince).toString() })
+    }
 
     return await interaction.reply({ embeds: [embed] })
   }

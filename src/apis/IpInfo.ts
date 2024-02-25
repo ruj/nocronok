@@ -25,12 +25,12 @@ export default class IpInfo extends ApiWrapper {
     })
   }
 
-  public find (ip: string) {
-    return this.request(ip)
+  public async find (ip: string): Promise<IIpInfoApiResponse> {
+    return await this.request(ip)
   }
 
-  private request (path: string) {
-    return GET<IIpInfoApiResponse>(
+  private async request (path: string): Promise<IIpInfoApiResponse> {
+    return await GET<IIpInfoApiResponse>(
       `${this.baseUrl}${
         !path.startsWith('/') ? `/${path}` : path
       }?${this.buildQuery({ token: IP_INFO_TOKEN })}`

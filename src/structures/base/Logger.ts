@@ -1,6 +1,8 @@
-import pino, { LoggerOptions } from 'pino'
+import pino, { type Logger, type LoggerOptions } from 'pino'
 
-export const logger = (options?: LoggerOptions & { prettyPrint: boolean }) => {
+export const logger = (
+  options?: LoggerOptions & { prettyPrint: boolean }
+): Logger => {
   try {
     require.resolve('pino-pretty')
   } catch (error) {
@@ -8,8 +10,8 @@ export const logger = (options?: LoggerOptions & { prettyPrint: boolean }) => {
   }
 
   return pino({
-    name: options?.name || 'Nocronok',
-    level: options?.level || 'debug',
+    name: options?.name ?? 'Nocronok',
+    level: options?.level ?? 'debug',
     timestamp: () =>
       `,"time":"${new Date().toLocaleTimeString('en-US', {
         hour12: false

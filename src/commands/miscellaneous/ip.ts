@@ -1,8 +1,10 @@
-import { IIpInfoApiResponse } from '@apis/IpInfo'
+import { type InteractionResponse } from 'discord.js'
+
+import { type IIpInfoApiResponse } from '@apis/IpInfo'
 import type Nocronok from '@structures/base/Nocronok'
 import {
   Command,
-  Context,
+  type Context,
   Embed,
   SlashCommandBuilder
 } from '@structures/command'
@@ -23,7 +25,10 @@ export default abstract class Ip extends Command {
     )
     .setDMPermission(false)
 
-  public async execute ({ interaction, polyglot }: Context) {
+  public async execute ({
+    interaction,
+    polyglot
+  }: Context): Promise<InteractionResponse<boolean>> {
     const ip = interaction.options.getString('ip')
 
     if (!/^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/.test(ip!)) {

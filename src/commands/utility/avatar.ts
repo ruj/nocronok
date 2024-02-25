@@ -1,7 +1,7 @@
-import type { ImageURLOptions } from 'discord.js'
+import type { ImageURLOptions, InteractionResponse, Message } from 'discord.js'
 
 import type Nocronok from '@structures/base/Nocronok'
-import { Command, Context, SlashCommandBuilder } from '@structures/command'
+import { Command, type Context, SlashCommandBuilder } from '@structures/command'
 
 enum EAvatarType {
   GLOBAL = 'GLOBAL',
@@ -38,7 +38,14 @@ export default abstract class Avatar extends Command {
     )
     .setDMPermission(false)
 
-  public async execute ({ interaction, guild, member, user: author }: Context) {
+  public async execute ({
+    interaction,
+    guild,
+    member,
+    user: author
+  }: Context): Promise<
+    InteractionResponse<boolean> | Message<boolean> | undefined
+  > {
     const user = interaction.options.getUser('user')
     const type = interaction.options.getString('type')
 
@@ -59,11 +66,11 @@ export default abstract class Avatar extends Command {
               : member?.displayAvatarURL(this.avatarOptions)!
           )
         } else {
-          return await interaction.reply(
-            member.avatar
+          return await interaction.reply({
+            content: member.avatar
               ? member.avatarURL(this.avatarOptions)
               : member.displayAvatarURL(this.avatarOptions)
-          )
+          })
         }
       }
     } else {

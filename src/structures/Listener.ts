@@ -1,14 +1,14 @@
 import type { Logger } from 'pino'
 
-import { IListenerOptions, IOptionHandler } from '@interfaces'
+import { type IListenerOptions, type IOptionHandler } from '@interfaces'
 import { optionHandler } from '@utils'
 
 import type Nocronok from './base/Nocronok'
 
 export default class Listener {
-  private listenerOptions: IOptionHandler
-  public unifiedEvents: boolean
-  public events: string[]
+  private readonly listenerOptions: IOptionHandler<IListenerOptions>
+  public unifiedEvents: boolean | undefined
+  public events: string[] | null | undefined
   public client: Nocronok
   public logger: Logger
 

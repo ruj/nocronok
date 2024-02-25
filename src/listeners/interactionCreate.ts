@@ -19,7 +19,7 @@ export default class InteractionCreate extends Listener {
 
   public async onInteractionCreate (
     interaction: CommandInteraction & ChatInputCommandInteraction
-  ) {
+  ): Promise<false | undefined> {
     if (!interaction.isCommand()) return false
     if (!interaction.guildId || !interaction.channelId) return false
     if (!interaction.client.guilds.cache.get(interaction.guildId)) return false

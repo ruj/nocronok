@@ -8,13 +8,13 @@ export default class ListenerLoader extends Loader {
     super(client)
   }
 
-  public load () {
-    return this.loadFiles('listeners')
+  public async load (): Promise<void> {
+    await this.loadFiles('listeners')
   }
 
-  public loadFile (Listener: any, event: string) {
+  public loadFile (Listener: any, event: string): void {
     const listener = new Listener(this.client)
-    const prepareEvent = (event: string) =>
+    const prepareEvent = (event: string): Nocronok =>
       this.client.on(event, (...variables) =>
         listener['on' + upperFirst(event)](...variables)
       )

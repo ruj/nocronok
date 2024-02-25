@@ -4,7 +4,7 @@ import isObject from 'lodash/isObject'
 import sample from 'lodash/sample'
 import transform from 'lodash/transform'
 
-import {
+import type {
   IApiWrapperOptions,
   ICommandOptions,
   IListenerOptions,
@@ -12,46 +12,47 @@ import {
   IRouteOptions
 } from '@interfaces'
 
-type CamelizeObject = {
-  [key: string]: any
+type SnakeToCamel<Type extends Record<string, any>> = {
+  [Key in keyof Type as Uncapitalize<string & Key>]: Type[Key]
 }
 
-export const blank = (length: number = 1) => '\xa0'.repeat(length)
+export const blank = (length: number = 1): string => '\xa0'.repeat(length)
 
-export const camelize = (object: CamelizeObject): CamelizeObject =>
+export const camelize = <Type extends Record<string, any>>(
+  object: Type
+): SnakeToCamel<Type> =>
   transform(object, (accumulator, currentValue, key, target) => {
-    const camelKey = !isArray(target) ? camelCase(key as string) : key
+    const camelKey = !isArray(target) ? camelCase(key) : key
     const value = isObject(currentValue) ? camelize(currentValue) : currentValue
 
     ;(accumulator as any)[camelKey] = value
   })
 
-export const optionHandler = (
+export const optionHandler = <Type>(
   structure: string,
-  options:
-    | IApiWrapperOptions
-    | ICommandOptions
-    | IListenerOptions
-    | IRouteOptions
-): IOptionHandler => ({
-  default (name: string, defaultValue: any | any[]): any {
-    const value = options[name as keyof typeof options]
+  options: Type
+): IOptionHandler<Type> => ({
+  default<Key extends keyof Type, Value extends Type[Key]> (
+    name: Key,
+    defaultValue: Value
+  ): Type[Key] {
+    const value = options[name]
 
-    return typeof value === 'undefined'
-      ? Array.isArray(defaultValue)
-        ? sample(defaultValue)
-        : defaultValue
-      : value
+    if (typeof value !== 'undefined') {
+      return value
+    }
+
+    return defaultValue
   },
-  optional (name: string): any | null {
-    return options[name as keyof typeof options] || null
+  optional<Key extends keyof Type> (name: Key): Type[Key] | null {
+    return options[name] ?? null
   },
-  required (name: string) {
-    const value = options[name as keyof typeof options]
+  required<Key extends keyof Type> (name: Key): Type[Key] {
+    const value = options[name]
 
     if (typeof value === 'undefined') {
       throw new Error(
-        `The "${name}" option in the ${structure} structure is required`
+        `The "${String(name)}" option in the ${structure} structure is required`
       )
     }
 

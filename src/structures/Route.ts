@@ -1,13 +1,17 @@
 import { Router } from 'express'
 import type { Logger } from 'pino'
 
-import { IOptionHandler, IRouteEndpoint, IRouteOptions } from '@interfaces'
+import {
+  type IOptionHandler,
+  type IRouteEndpoint,
+  type IRouteOptions
+} from '@interfaces'
 import { optionHandler } from '@utils'
 
 import type Nocronok from './base/Nocronok'
 
 export default class Route {
-  private routeOptions: IOptionHandler
+  private readonly routeOptions: IOptionHandler<IRouteOptions>
   public client: Nocronok
   public logger: Logger
   public name: string
