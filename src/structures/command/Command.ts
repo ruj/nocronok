@@ -22,8 +22,8 @@ export default abstract class Command {
   public client: Nocronok
   public logger: Logger
   public data: SlashCommandBuilder
-  public abstract execute(context: Context): any
-  public abstract preExecute(context: Context): any
+  public abstract execute(context: Context): Promise<any>
+  public abstract preExecute(context: Context): Promise<any>
 
   constructor (client: Nocronok, options: ICommandOptions) {
     this.commandOptions = optionHandler('Command', options)
