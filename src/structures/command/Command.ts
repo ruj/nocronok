@@ -2,27 +2,28 @@ import type { SlashCommandBuilder } from 'discord.js'
 import type { Logger } from 'pino'
 
 import {
-  ICommandOptions,
-  ICommandRequirementsOptions,
-  IOptionHandler
+  type ICommandOptions,
+  type ICommandRequirementsOptions,
+  type IOptionHandler
 } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { optionHandler } from '@utils'
+import Environment from '@utils/Environment'
 
-import Context from './Context'
+import type Context from './Context'
 import Requirements from './Requirements'
 
 export default abstract class Command {
-  private commandOptions: IOptionHandler
+  private readonly commandOptions: IOptionHandler<ICommandOptions>
   public name: string
   public parent?: boolean
-  public parentName?: string
-  public requirements?: ICommandRequirementsOptions
+  public parentName?: string | null
+  public requirements?: ICommandRequirementsOptions | null
   public client: Nocronok
   public logger: Logger
   public data: SlashCommandBuilder
-  public abstract execute(context: Context): any
-  public abstract preExecute(context: Context): any
+  public abstract execute(context: Context): Promise<any>
+  public abstract preExecute(context: Context): Promise<any>
 
   constructor (client: Nocronok, options: ICommandOptions) {
     this.commandOptions = optionHandler('Command', options)
@@ -35,10 +36,10 @@ export default abstract class Command {
     this.client = client
     this.logger = client.logger
 
-    this.data = {} as SlashCommandBuilder
+    this.data = {} as unknown as SlashCommandBuilder
   }
 
-  public async executeCommand (context: Context) {
+  public async executeCommand (context: Context): Promise<void> {
     try {
       await this.handleRequirements(context)
 
@@ -48,21 +49,26 @@ export default abstract class Command {
         await this.execute(context)
       }
     } catch (error) {
-      this.error(context, error)
+      void this.error(context, error)
     }
   }
 
-  private handleRequirements (context: Context) {
-    return this.requirements
-      ? Requirements.handle(context, this.requirements)
-      : true
+  private async handleRequirements (context: Context): Promise<boolean> {
+    if (this.requirements) {
+      await Requirements.handle(context, this.requirements)
+    }
+
+    return true
   }
 
-  public async error ({ interaction }: Context, error: any) {
+  public async error ({ interaction }: Context, error: any): Promise<void> {
     if (error instanceof Error) {
       await interaction.reply({ content: error.message, ephemeral: true })
-    }
 
-    this.logger.error({ labels: ['Command', 'execute'] }, error.message)
+      this.logger.error(
+        { labels: ['Command', 'execute'], ...(Environment.isDev() && error) },
+        error.message
+      )
+    }
   }
 }

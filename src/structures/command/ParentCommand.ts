@@ -1,15 +1,15 @@
-import { ICommandOptions } from '@interfaces'
-import Nocronok from '@structures/base/Nocronok'
+import { type ICommandOptions } from '@interfaces'
+import type Nocronok from '@structures/base/Nocronok'
 
 import Command from './Command'
-import Context from './Context'
+import type Context from './Context'
 
 export default abstract class ParentCommand extends Command {
   constructor (client: Nocronok, options: ICommandOptions) {
     super(client, options)
   }
 
-  public async preExecute (context: Context) {
+  public async preExecute (context: Context): Promise<void> {
     try {
       const subcommand = context.interaction.options.getSubcommand()
       const subcommandName = this.parent
@@ -22,7 +22,7 @@ export default abstract class ParentCommand extends Command {
         await this.execute(context)
       }
     } catch (error) {
-      this.error(context, error)
+      void this.error(context, error)
     }
   }
 }

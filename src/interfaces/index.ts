@@ -4,9 +4,13 @@ export * from './file'
 export * from './listener'
 export * from './option'
 export * from './route'
+export * from './steam'
 
-export interface IOptionHandler {
-  default: (name: string, defaultValue: any | any[]) => any
-  optional: (name: string) => any | null
-  required: (name: string) => any
+export interface IOptionHandler<Type> {
+  default: <Key extends keyof Type, Value extends Type[Key]>(
+    name: Key,
+    defaultValue: Value
+  ) => Type[Key]
+  optional: <Key extends keyof Type>(name: Key) => Type[Key] | null
+  required: <Key extends keyof Type>(name: Key) => Type[Key]
 }

@@ -1,7 +1,12 @@
-import { OAuth2Scopes, PermissionFlagsBits, hyperlink } from 'discord.js'
+import {
+  type InteractionResponse,
+  OAuth2Scopes,
+  PermissionFlagsBits,
+  hyperlink
+} from 'discord.js'
 
 import type Nocronok from '@structures/base/Nocronok'
-import { Command, Context, SlashCommandBuilder } from '@structures/command'
+import { Command, type Context, SlashCommandBuilder } from '@structures/command'
 
 export default abstract class Invite extends Command {
   constructor (client: Nocronok) {
@@ -13,7 +18,9 @@ export default abstract class Invite extends Command {
     .setDescription('Create an invite link to add the bot to a server')
     .setDMPermission(false)
 
-  public async execute ({ interaction }: Context) {
+  public async execute ({
+    interaction
+  }: Context): Promise<InteractionResponse<boolean>> {
     const inviteLink = this.client.generateInvite({
       permissions: [
         PermissionFlagsBits.CreateInstantInvite,

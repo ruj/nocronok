@@ -1,7 +1,7 @@
 import { readdir, stat } from 'fs/promises'
 import { resolve, sep } from 'path'
 
-import { IFileObject, IRequireDirectoryOptions } from '@interfaces'
+import { type IFileObject, type IRequireDirectoryOptions } from '@interfaces'
 
 export default class File {
   public static async requireDirectory (
@@ -12,17 +12,16 @@ export default class File {
       extensions: ['js', 'ts'],
       recursive: true
     }
-  ): Promise<unknown> {
+  ): Promise<Record<string, IFileObject>> {
     const files = await readdir(directory)
-    const filesObject = {} as { [key: string]: IFileObject }
+    const filesObject: Record<string, IFileObject> = {}
 
-    return Promise.all(
+    return await Promise.all(
       files.map(async (file) => {
         const path = resolve(directory, file)
-        const extensions =
-          Array.isArray(options.extensions) && options.extensions.length
-            ? options.extensions.join('|')
-            : options.extensions
+        const extensions = Array.isArray(options.extensions)
+          ? options.extensions.join('|')
+          : options.extensions
 
         if (file.match(new RegExp(`\\.(${extensions})$`))) {
           try {
@@ -31,7 +30,7 @@ export default class File {
             const parent = path.split(sep).reverse()[1]
 
             if (success) {
-              await success(required, filename, parent)
+              await Promise.resolve(success(required, filename, parent))
             }
 
             filesObject[filename] = {
@@ -50,7 +49,7 @@ export default class File {
           )
 
           if (isDirectory) {
-            return File.requireDirectory(path, success, error, options)
+            return await File.requireDirectory(path, success, error, options)
           }
         }
       })
