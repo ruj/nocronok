@@ -1,11 +1,11 @@
-import { IApiWrapperOptions, IOptionHandler } from '@interfaces'
+import { type IApiWrapperOptions, type IOptionHandler } from '@interfaces'
 import { optionHandler } from '@utils'
 
 export default class ApiWrapper {
-  private apiOptions: IOptionHandler
+  private readonly apiOptions: IOptionHandler<IApiWrapperOptions>
   public name: string
   public baseUrl: string
-  public envVars?: string[]
+  public envVars?: string[] | null | undefined
 
   constructor (options: IApiWrapperOptions) {
     this.apiOptions = optionHandler('ApiWrapper', options)
@@ -15,11 +15,11 @@ export default class ApiWrapper {
     this.envVars = this.apiOptions.optional('envVars')
   }
 
-  public load () {
+  public load (): this {
     return this
   }
 
-  public buildQuery (parameters: { [key: string]: any }) {
+  public buildQuery (parameters: Record<string, any>): string {
     return Object.entries(parameters)
       .map((parameter) => parameter.join('='))
       .join('&')

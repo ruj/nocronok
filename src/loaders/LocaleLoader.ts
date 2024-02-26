@@ -3,7 +3,7 @@ import Loader from '@structures/Loader'
 import Polyglot from '@structures/Polyglot'
 
 export default class LocaleLoader extends Loader {
-  public locales: { [key: string]: any }
+  public locales: Record<string, any>
 
   constructor (client: Nocronok) {
     super(client)
@@ -11,14 +11,14 @@ export default class LocaleLoader extends Loader {
     this.locales = {}
   }
 
-  public async load () {
+  public async load (): Promise<boolean> {
     await this.loadFiles('locales', { extensions: 'json', recursive: true })
-    await this.initializePolyglot()
+    await Promise.resolve(this.initializePolyglot())
 
     return true
   }
 
-  public loadFile (data: any, filename: string, locale: string) {
+  public loadFile (data: any, filename: string, locale: string): void {
     if (!Object.prototype.hasOwnProperty.call(this.locales, locale)) {
       if (!Object.prototype.hasOwnProperty.call(this.locales, filename)) {
         this.locales[locale] = { [filename]: data }
@@ -30,7 +30,7 @@ export default class LocaleLoader extends Loader {
     }
   }
 
-  private initializePolyglot () {
+  private initializePolyglot (): void {
     const polyglots = new Map()
 
     for (const locale in this.locales) {

@@ -1,4 +1,14 @@
 {
   "generic": "An error occurred",
-  "developersOnly": "Only the bot developers can to that"
+  "developersOnly": "Only the bot developers can to that",
+  "commands": {
+    "currency": {
+      "convert": {
+        "same_currency_code": "You are using the same currency code"
+      }
+    },
+    "ip": {
+      "invalid_ip": "IP address is not valid"
+    }
+  }
 }

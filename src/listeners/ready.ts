@@ -6,7 +6,7 @@ export default class Ready extends Listener {
     super(client)
   }
 
-  public onReady () {
+  public onReady (): void {
     this.logger.info(
       { labels: ['Listener', 'ready'] },
       `Connected as ${this.client.user?.tag}`

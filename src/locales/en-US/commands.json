@@ -1,7 +1,6 @@
 {
   "currency": {
     "convert": {
-      "same_currency_code": "You are using the same currency code",
       "is_approximately": "is approximately"
     }
   },
@@ -41,6 +40,21 @@
       "managed": "Managed",
       "stickers": "Stickers"
     }
+  },
+  "ip": {
+    "ip": "IP",
+    "hostname": "Hostname",
+    "anycast": "Anycast",
+    "city": "City",
+    "region": "Region",
+    "country": "Country",
+    "coordinates": {
+      "latitude": "Latitude",
+      "longitude": "Logitude"
+    },
+    "organization": "Organization",
+    "postal_code": "Postal code",
+    "timezone": "Timezone"
   },
   "steam": {
     "user": {

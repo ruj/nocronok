@@ -1,0 +1,16 @@
+{
+  "api": {
+    "prefix": ["api"],
+    "body": [
+      "import ApiWrapper from '@structures/ApiWrapper'",
+      "",
+      "export default class SnippetApi extends ApiWrapper {"
+      "\tconstructor () {",
+      "\t\tsuper({ name: '', baseUrl: '' })",
+      "\t}",
+      "",
+      "\tprivate request () {}",
+      "}"
+    ]
+  }
+}

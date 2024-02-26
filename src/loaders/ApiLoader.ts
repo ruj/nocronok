@@ -1,4 +1,4 @@
-import ApiWrapper from '@structures/ApiWrapper'
+import type ApiWrapper from '@structures/ApiWrapper'
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
 
@@ -7,17 +7,17 @@ export default class ApiLoader extends Loader {
     super(client)
   }
 
-  public load () {
-    return this.loadFiles('apis')
+  public async load (): Promise<void> {
+    await this.loadFiles('apis')
   }
 
-  public async loadFile (Api: any) {
-    const api = new Api()
+  public async loadFile (Api: any): Promise<void> {
+    const api: ApiWrapper = new Api()
 
-    this.addApi(api)
+    void this.addApi(api)
   }
 
-  private async addApi (api: ApiWrapper) {
+  private async addApi (api: ApiWrapper): Promise<boolean> {
     if (
       api.envVars &&
       !api.envVars.every((variable) => {
@@ -37,7 +37,7 @@ export default class ApiLoader extends Loader {
     }
 
     try {
-      this.client.apis[api.name] = await api.load()
+      this.client.apis[api.name] = await Promise.resolve(api.load())
 
       return true
     } catch (error: unknown) {

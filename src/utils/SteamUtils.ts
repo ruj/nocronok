@@ -3,51 +3,61 @@ import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
 import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
+import { type ISteamFindUser } from '@interfaces'
 
 import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
 import { GET } from './http'
 
+export enum EIdentifierFormat {
+  SHORT = 'SHORT',
+  LONG = 'LONG'
+}
+
 export default class SteamUtils {
-  public static buildUserProfileLink (user: string) {
-    return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileUrl(user)}`
+  public static buildUserProfileLink (user: string): string {
+    return `${SteamHttp.COMMUNITY}/${SteamUtils.hydrolyzeProfileIdentifier(user, EIdentifierFormat.LONG)}`
   }
 
-  public static buildSteamRepProfileLink (userId: string) {
+  public static buildSteamRepProfileLink (userId: string): string {
     return SteamUtils.generateThirdPartyServicePermalink(
       ESteamThirdPartyServices.STEAM_REP,
       userId
     ) as string
   }
 
-  public static buildSteamTradesProfileLink (userId: string) {
+  public static buildSteamTradesProfileLink (userId: string): string {
     return SteamUtils.generateThirdPartyServicePermalink(
       ESteamThirdPartyServices.STEAM_TRADES,
       userId
     ) as string
   }
 
-  public static buildSteamLadderProfileLink (userId: string) {
+  public static buildSteamLadderProfileLink (userId: string): string {
     return SteamUtils.generateThirdPartyServicePermalink(
       ESteamThirdPartyServices.STEAM_LADDER,
       userId
     ) as string
   }
 
-  public static async findUser (user: string) {
+  public static async findUser (user: string): Promise<ISteamFindUser> {
     const profileUrl = [
       SteamHttp.COMMUNITY,
-      SteamUtils.hydrolyzeProfileUrl(user)
+      SteamUtils.hydrolyzeProfileIdentifier(user, EIdentifierFormat.LONG)
     ].join('/')
 
-    const { profile } = await GET(profileUrl + '?xml=1').then((body) =>
-      parseStringPromise(body as string, { explicitArray: false, trim: true })
+    const { profile } = await GET(profileUrl + '?xml=1').then(
+      async (body) =>
+        await parseStringPromise(body as string, {
+          explicitArray: false,
+          trim: true
+        })
     )
 
     if (!profile) {
       throw new Error('The specified profile could not be found')
     }
 
-    const steamId = new SteamID(profile.steamID64)
+    const steamId = new SteamID(profile.steamID64 as string)
     const htmlProfile = await GET(profileUrl).then((body) => {
       const $ = load(body as string)
 
@@ -58,55 +68,66 @@ export default class SteamUtils {
     })
 
     const data = {
-      steam_3id: steamId.getSteam3RenderedID(),
-      steam_id32: steamId.getSteam2RenderedID(),
-      steam_id64: steamId.getSteamID64(),
-      custom_url: profile.customURL || null,
+      steam3Id: steamId.getSteam3RenderedID(),
+      steamId32: steamId.getSteam2RenderedID(),
+      steamId64: steamId.getSteamID64(),
+      customUrl: profile.customURL ?? null,
       name: profile.steamID,
-      realname: profile.realname || null,
-      avatar_url: {
+      realname: profile.realname ?? null,
+      avatarUrl: {
         small: profile.avatarIcon,
         medium: profile.avatarMedium,
         full: profile.avatarFull
       },
       level: htmlProfile.level ?? 0,
-      location: profile.location || null,
+      location: profile.location ?? null,
       status: profile.stateMessage.replace(/<br\/>.*/, ''),
-      privacy: SteamUtils.formatPrivacyState(profile.privacyState),
+      privacy: SteamUtils.formatPrivacyState(profile.privacyState as string)!,
       limitations: {
         vac: !!+profile.vacBanned,
-        trade_ban: profile.tradeBanState !== 'None',
+        tradeBan: profile.tradeBanState !== 'None',
         limited: !!+profile.isLimitedAccount,
-        community_ban: !htmlProfile.private && !htmlProfile.level
+        communityBan: !htmlProfile.private && !htmlProfile.level
       },
-      member_since: profile.memberSince || null
+      memberSince: profile.memberSince || null
     }
 
     return data
   }
 
-  public static hydrolyzeProfileUrl (value: string) {
-    const match = value.match(
+  public static hydrolyzeProfileIdentifier (
+    identifier: string,
+    format: EIdentifierFormat
+  ): string {
+    const match = identifier.match(
       SteamUtils.communitySubdirectoryRegex('id|profiles')
     )
-    const user = Array.isArray(match) ? match[1] : value
 
-    if (
-      user.startsWith('STEAM_') ||
-      user.startsWith('765') ||
-      user.startsWith('[U:')
-    ) {
-      const steamId = new SteamID(user)
+    identifier = Array.isArray(match) ? match[1] : identifier
 
-      return steamId.isValid() ? `profiles/${steamId.toString()}` : null
+    let result: string
+
+    if (/^(STEAM_|765|\[U:)/.test(identifier)) {
+      const steamId = new SteamID(identifier)
+
+      result = steamId.isValid() ? `profiles/${steamId.toString()}` : identifier
+    } else if (!/^(id\/|profiles\/)/.test(identifier)) {
+      result = `id/${identifier}`
     } else {
-      return !user.startsWith('id/') && !user.startsWith('profiles/')
-        ? `id/${user}`
-        : user
+      result = identifier
+    }
+
+    switch (format) {
+      case EIdentifierFormat.SHORT:
+        return result.replace(/^(id|profiles)\//, '')
+      case EIdentifierFormat.LONG:
+        return result
     }
   }
 
-  public static communitySubdirectoryRegex (subdirectory: string | string[]) {
+  public static communitySubdirectoryRegex (
+    subdirectory: string | string[]
+  ): RegExp {
     if (Array.isArray(subdirectory)) {
       subdirectory = subdirectory.join('|')
     }
@@ -119,7 +140,7 @@ export default class SteamUtils {
   public static generateThirdPartyServicePermalink (
     thirdPartyServiceName: ESteamThirdPartyServices,
     userId: string | SteamID
-  ) {
+  ): string | false {
     if (!(userId instanceof SteamID)) {
       userId = new SteamID(userId)
     }
@@ -146,7 +167,7 @@ export default class SteamUtils {
     )
   }
 
-  public static formatPrivacyState (state: string) {
+  public static formatPrivacyState (state: string): string | undefined {
     state = state.replace(/(\w)(only)/, '$1_$2')
 
     switch (state.toUpperCase()) {

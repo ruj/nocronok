@@ -4,7 +4,7 @@ WORKDIR /usr/nok
 
 COPY package.json yarn.lock prisma ./
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --update-checksums
 
 COPY . .
 

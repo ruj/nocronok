@@ -4,12 +4,12 @@ import type {
 } from 'discord.js'
 
 export interface ICommandRequirementsOptions {
-  developersOnly?: boolean
+  developersOnly: boolean
 }
 
 export interface ICommandRequirementsParsedOptions
   extends ICommandRequirementsOptions {
-  errors: { [K in keyof ICommandRequirementsOptions]: string }
+  errors: { [Key in keyof ICommandRequirementsOptions]: string }
 }
 
 export interface ICommandOptions {

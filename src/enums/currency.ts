@@ -4,7 +4,8 @@ export enum ECurrencyCode {
   EUR = 'EUR',
   CNY = 'CNY',
   JPY = 'JPY',
-  RUB = 'RUB'
+  RUB = 'RUB',
+  TWD = 'TWD'
 }
 
 export enum ECurrencySymbol {
@@ -13,5 +14,6 @@ export enum ECurrencySymbol {
   EUR = '€',
   CNY = '¥',
   JPY = '¥',
-  RUB = '₽'
+  RUB = '₽',
+  TWD = 'NT$'
 }

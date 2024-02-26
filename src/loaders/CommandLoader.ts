@@ -7,17 +7,17 @@ export default class CommandLoader extends Loader {
     super(client)
   }
 
-  public load () {
-    return this.loadFiles('commands')
+  public async load (): Promise<void> {
+    await this.loadFiles('commands')
   }
 
-  public loadFile (Command: any) {
-    const command = new Command(this.client)
+  public loadFile (Command: any): void {
+    const command: Command = new Command(this.client)
 
     this.addCommand(command)
   }
 
-  private addCommand (command: Command) {
+  private addCommand (command: Command): boolean {
     if (typeof command.parentName !== 'string') {
       this.client.commands.set(command.name, command)
     } else {
@@ -27,7 +27,7 @@ export default class CommandLoader extends Loader {
     return true
   }
 
-  private addSubcommand (subcommand: Command) {
+  private addSubcommand (subcommand: Command): boolean {
     let parentSubcommand
 
     if (
