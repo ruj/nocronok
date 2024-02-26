@@ -59,3 +59,11 @@ export const optionHandler = <Type>(
     return value
   }
 })
+
+export const pluralize = (
+  condition: boolean,
+  plural: string = 's',
+  singular: string = ''
+): string => {
+  return condition ? plural : singular
+}
