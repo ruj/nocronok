@@ -58,9 +58,11 @@
   },
   "steam": {
     "user": {
+      "details": "Details",
       "level": "Level",
       "status": "Status",
       "privacy": "Privacy",
+      "limitations": "Limitations",
       "vac": "VAC",
       "trade_ban": "Trade Ban",
       "limited": "Limited",
