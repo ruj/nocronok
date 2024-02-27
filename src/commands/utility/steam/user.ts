@@ -35,7 +35,7 @@ export default abstract class SteamUser extends Command {
       .setThumbnail(user.avatarUrl.full)
       .addFields([
         {
-          name: blank(),
+          name: polyglot.t('commands.steam.user.details'),
           value: [
             `${polyglot.t('commands.steam.user.level')}: ${user.level}`,
             `${polyglot.t('commands.steam.user.status')}: ${user.status}`,
@@ -44,7 +44,7 @@ export default abstract class SteamUser extends Command {
           inline: true
         },
         {
-          name: blank(),
+          name: polyglot.t('commands.steam.user.limitations'),
           value: [
             `${polyglot.t('commands.steam.user.vac')}: ${polyglot.yn(
               user.limitations.vac
