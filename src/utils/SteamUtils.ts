@@ -3,7 +3,7 @@ import SteamID from 'steamid'
 import { parseStringPromise } from 'xml2js'
 
 import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
-import { type ISteamFindUser } from '@interfaces'
+import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 
 import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
 import { GET } from './http'
@@ -93,6 +93,38 @@ export default class SteamUtils {
     }
 
     return data
+  }
+
+  public static async findSteamTradesUserById (
+    userId: string
+  ): Promise<ISteamTradesFindUser> {
+    const profileUrl = [
+      `${SteamThirdPartyServiceHttp.STEAM_TRADES}/user`,
+      SteamUtils.hydrolyzeProfileIdentifier(userId, EIdentifierFormat.SHORT)
+    ].join('/')
+
+    return await GET(profileUrl).then((body) => {
+      const $ = load(body as string)
+      const [registered, lastOnline, trades] = $('.sidebar > .sidebar_table')
+        .last()
+        .find('span[data-timestamp], a')
+        .map((_, element) =>
+          $(element).is('span')
+            ? $(element).data('timestamp')
+            : $(element).text()
+        )
+        .get()
+
+      return {
+        reputation: {
+          positive: +$('.increment_positive_review_count').first().text(),
+          negative: +$('.increment_negative_review_count').first().text()
+        },
+        registered: registered !== '0' ? (registered as number) : null,
+        lastOnline: ((lastOnline && +lastOnline) as number) || null,
+        trades: ((trades && +trades) as number) ?? 0
+      }
+    })
   }
 
   public static hydrolyzeProfileIdentifier (

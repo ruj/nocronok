@@ -1,9 +1,10 @@
 import { type InteractionResponse, hyperlink } from 'discord.js'
 
-import { type ISteamFindUser } from '@interfaces'
+import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, type Context, Embed } from '@structures/command'
 import { blank } from '@utils'
+import { SteamThirdPartyServiceHttp } from '@utils/Constants'
 import SteamUtils from '@utils/SteamUtils'
 
 export default abstract class SteamUser extends Command {
@@ -15,9 +16,10 @@ export default abstract class SteamUser extends Command {
     interaction,
     polyglot
   }: Context): Promise<InteractionResponse<boolean>> {
-    const user: ISteamFindUser = await SteamUtils.findUser(
-      interaction.options.getString('user')!
-    )
+    const user: ISteamFindUser & { steamTrades?: ISteamTradesFindUser } =
+      await SteamUtils.findUser(interaction.options.getString('user')!)
+
+    user.steamTrades = await SteamUtils.findSteamTradesUserById(user.steamId64)
 
     const embed = new Embed()
 
@@ -56,6 +58,16 @@ export default abstract class SteamUser extends Command {
             `${polyglot.t('commands.steam.user.community_ban')}: ${polyglot.yn(
               user.limitations.communityBan
             )}`
+          ].join('\n'),
+          inline: true
+        },
+        {
+          name: 'SteamTrades',
+          value: [
+            `${polyglot.t('commands.steam.user.steam_trades.reputation')}`,
+            `- ${polyglot.t('commands.steam.user.steam_trades.positive')}: ${user.steamTrades.reputation.positive}`,
+            `- ${polyglot.t('commands.steam.user.steam_trades.negative')}: ${user.steamTrades.reputation.negative}`,
+            `${polyglot.t('commands.steam.user.steam_trades.trades')}: ${user.steamTrades.trades ? hyperlink(user.steamTrades.trades.toString(), `${SteamThirdPartyServiceHttp.STEAM_TRADES}/trades/search?user=${user.steamId64}`) : user.steamTrades.trades}`
           ].join('\n'),
           inline: true
         },
