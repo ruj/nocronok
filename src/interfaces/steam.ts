@@ -22,3 +22,15 @@ export interface ISteamFindUser {
   }
   memberSince: string | null
 }
+
+export interface ISteamTradesReputation {
+  positive: number
+  negative: number
+}
+
+export interface ISteamTradesFindUser {
+  reputation: ISteamTradesReputation
+  registered: string | number | null
+  lastOnline: string | number | null
+  trades: number
+}
