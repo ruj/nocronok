@@ -66,7 +66,13 @@
       "limited": "Limited",
       "community_ban": "Community Ban",
       "profile_url": "Profile URL",
-      "profile_permalink": "Profile Permalink"
+      "profile_permalink": "Profile Permalink",
+      "steam_trades": {
+        "reputation": "Reputation",
+        "positive": "Positive",
+        "negative": "Negative",
+        "trades": "Trades"
+      }
     }
   }
 }
