@@ -41,6 +41,9 @@
       "stickers": "Stickers"
     }
   },
+  "invite": {
+    "invite_link": "Invite Link"
+  },
   "ip": {
     "ip": "IP",
     "hostname": "Hostname",
