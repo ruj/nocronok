@@ -177,25 +177,18 @@ export default class SteamUtils {
       userId = new SteamID(userId)
     }
 
-    let pathPrefix: string
-
-    if (thirdPartyServiceName === ESteamThirdPartyServices.STEAM_REP) {
-      pathPrefix = 'profiles'
-    } else if (
-      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_TRADES
-    ) {
-      pathPrefix = 'user'
-    } else if (
-      thirdPartyServiceName === ESteamThirdPartyServices.STEAM_LADDER
-    ) {
-      pathPrefix = 'profile'
+    const pathPrefixMapping: Record<ESteamThirdPartyServices, string> = {
+      [ESteamThirdPartyServices.STEAM_REP]: 'profiles',
+      [ESteamThirdPartyServices.STEAM_TRADES]: 'user',
+      [ESteamThirdPartyServices.STEAM_LADDER]: 'profile'
     }
+    const pathPrefix: string = pathPrefixMapping[thirdPartyServiceName]
 
     return (
       userId.isValid() &&
       `${
         SteamThirdPartyServicesHttp[thirdPartyServiceName]
-      }/${pathPrefix!}/${userId.toString()}`
+      }/${pathPrefix}/${userId.toString()}`
     )
   }
 
