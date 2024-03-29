@@ -3,13 +3,17 @@ import type {
   CommandInteraction
 } from 'discord.js'
 
+import { type Command } from '@structures/command'
+
 export interface ICommandRequirementsOptions {
   developersOnly: boolean
 }
 
 export interface ICommandRequirementsParsedOptions
   extends ICommandRequirementsOptions {
-  errors: { [Key in keyof ICommandRequirementsOptions]: string }
+  errors: { [Key in keyof ICommandRequirementsOptions]: string } & {
+    cooldown: string
+  }
 }
 
 export interface ICommandOptions {
@@ -20,5 +24,6 @@ export interface ICommandOptions {
 }
 
 export interface ICommandContextOptions {
+  command: Command
   interaction: CommandInteraction & ChatInputCommandInteraction
 }
