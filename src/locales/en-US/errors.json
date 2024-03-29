@@ -1,6 +1,7 @@
 {
   "generic": "An error occurred",
   "developersOnly": "Only the bot developers can to that",
+  "cooldown": "You're going too many fast. Slow, please!",
   "commands": {
     "currency": {
       "convert": {
