@@ -7,7 +7,10 @@ import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, type Context, Embed } from '@structures/command'
 import { blank } from '@utils'
-import { SteamThirdPartyServicesHttp } from '@utils/Constants'
+import {
+  SteamThirdPartyServicesHttp,
+  SteamThirdPartyServicesNames
+} from '@utils/Constants'
 import SteamUtils from '@utils/SteamUtils'
 
 export default abstract class SteamUser extends Command {
@@ -70,7 +73,7 @@ export default abstract class SteamUser extends Command {
           inline: true
         },
         {
-          name: 'SteamRep',
+          name: SteamThirdPartyServicesNames.STEAM_REP,
           value: [
             `${polyglot.t('commands.steam.user.steam_rep.status')}: ${startCase(camelCase(user.steamRep?.status))}`,
             user.steamRep?.details
@@ -80,7 +83,7 @@ export default abstract class SteamUser extends Command {
           inline: true
         },
         {
-          name: 'SteamTrades',
+          name: SteamThirdPartyServicesNames.STEAM_TRADES,
           value: [
             `${polyglot.t('commands.steam.user.steam_trades.reputation')}`,
             `- ${polyglot.t('commands.steam.user.steam_trades.positive')}: ${user.steamTrades.reputation.positive}`,
@@ -115,15 +118,15 @@ export default abstract class SteamUser extends Command {
           name: blank(),
           value: [
             hyperlink(
-              'SteamRep',
+              SteamThirdPartyServicesNames.STEAM_REP,
               SteamUtils.buildSteamRepProfileLink(user.steamId64)
             ),
             hyperlink(
-              'SteamTrades',
+              SteamThirdPartyServicesNames.STEAM_TRADES,
               SteamUtils.buildSteamTradesProfileLink(user.steamId64)
             ),
             hyperlink(
-              'SteamLadder',
+              SteamThirdPartyServicesNames.STEAM_LADDER,
               SteamUtils.buildSteamLadderProfileLink(user.steamId64)
             )
           ].join(' | ')
