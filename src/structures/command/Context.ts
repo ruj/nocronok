@@ -10,7 +10,10 @@ import type {
 import { type ICommandContextOptions } from '@interfaces'
 import { type PolyglotExtended } from '@types'
 
+import type Command from './Command'
+
 export default class Context {
+  public command: Command
   public interaction: CommandInteraction & ChatInputCommandInteraction
   public guild: Guild | null
   public channel: TextBasedChannel | null
@@ -19,6 +22,7 @@ export default class Context {
   public polyglot: PolyglotExtended
 
   constructor (options: ICommandContextOptions) {
+    this.command = options.command
     this.interaction = options.interaction
     this.guild = options.interaction.guild
     this.channel = options.interaction.channel

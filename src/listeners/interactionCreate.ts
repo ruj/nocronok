@@ -30,7 +30,7 @@ export default class InteractionCreate extends Listener {
     if (this.commands.has(commandName)) {
       const { channel, guild, user } = interaction
       const command = this.commands.get(commandName)
-      const context = new Context({ interaction })
+      const context = new Context({ command, interaction })
 
       context.setPolyglot(this.client.polyglots.get(guild?.preferredLocale!)!)
 
