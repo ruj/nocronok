@@ -19,7 +19,8 @@ export default abstract class Invite extends Command {
     .setDMPermission(false)
 
   public async execute ({
-    interaction
+    interaction,
+    polyglot
   }: Context): Promise<InteractionResponse<boolean>> {
     const inviteLink = this.client.generateInvite({
       permissions: [
@@ -71,6 +72,8 @@ export default abstract class Invite extends Command {
       scopes: [OAuth2Scopes.Bot]
     })
 
-    return await interaction.reply(hyperlink('Invite Link', inviteLink))
+    return await interaction.reply(
+      hyperlink(polyglot.t('commands.invite.invite_link'), inviteLink)
+    )
   }
 }
