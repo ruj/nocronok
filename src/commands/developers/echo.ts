@@ -22,7 +22,7 @@ export default abstract class Echo extends Command {
   public async execute ({
     interaction,
     channel
-  }: Context): Promise<Message<false> | Message<true> | undefined> {
+  }: Context): Promise<Message<boolean> | undefined> {
     const input = interaction.options.getString('input')
 
     await interaction.deferReply()
