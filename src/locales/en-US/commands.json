@@ -69,6 +69,10 @@
       "community_ban": "Community Ban",
       "profile_url": "Profile URL",
       "profile_permalink": "Profile Permalink",
+      "steam_rep": {
+        "status": "Status",
+        "details": "Details"
+      },
       "steam_trades": {
         "reputation": "Reputation",
         "positive": "Positive",

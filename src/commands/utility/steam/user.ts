@@ -1,5 +1,8 @@
-import { type InteractionResponse, hyperlink } from 'discord.js'
+import { hyperlink, type Message } from 'discord.js'
+import camelCase from 'lodash/camelCase'
+import startCase from 'lodash/startCase'
 
+import { type ISteamRepReputationResponse } from '@apis/SteamRep'
 import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, type Context, Embed } from '@structures/command'
@@ -15,10 +18,15 @@ export default abstract class SteamUser extends Command {
   public async execute ({
     interaction,
     polyglot
-  }: Context): Promise<InteractionResponse<boolean>> {
-    const user: ISteamFindUser & { steamTrades?: ISteamTradesFindUser } =
-      await SteamUtils.findUser(interaction.options.getString('user')!)
+  }: Context): Promise<Message<boolean>> {
+    await interaction.deferReply()
 
+    const user: ISteamFindUser & {
+      steamRep?: ISteamRepReputationResponse
+      steamTrades?: ISteamTradesFindUser
+    } = await SteamUtils.findUser(interaction.options.getString('user')!)
+
+    user.steamRep = await this.client.apis.steamRep.reputation(user.steamId64)
     user.steamTrades = await SteamUtils.findSteamTradesUserById(user.steamId64)
 
     const embed = new Embed()
@@ -58,6 +66,16 @@ export default abstract class SteamUser extends Command {
             `${polyglot.t('commands.steam.user.community_ban')}: ${polyglot.yn(
               user.limitations.communityBan
             )}`
+          ].join('\n'),
+          inline: true
+        },
+        {
+          name: 'SteamRep',
+          value: [
+            `${polyglot.t('commands.steam.user.steam_rep.status')}: ${startCase(camelCase(user.steamRep?.status))}`,
+            user.steamRep?.details
+              ? `${polyglot.t('commands.steam.user.steam_rep.details')}: ${user.steamRep?.details}`
+              : null
           ].join('\n'),
           inline: true
         },
@@ -116,6 +134,6 @@ export default abstract class SteamUser extends Command {
       embed.setFooter({ text: new Date(user.memberSince).toString() })
     }
 
-    return await interaction.reply({ embeds: [embed] })
+    return await interaction.editReply({ embeds: [embed] })
   }
 }
