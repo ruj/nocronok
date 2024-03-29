@@ -17,7 +17,7 @@ export const SteamHttp = {
   COMMUNITY: 'https://steamcommunity.com'
 }
 
-export const SteamThirdPartyServiceHttp = {
+export const SteamThirdPartyServicesHttp = {
   STEAM_REP: 'https://steamrep.com',
   STEAM_TRADES: 'https://steamtrades.com',
   STEAM_LADDER: 'https://steamladder.com'

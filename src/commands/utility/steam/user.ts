@@ -7,7 +7,7 @@ import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, type Context, Embed } from '@structures/command'
 import { blank } from '@utils'
-import { SteamThirdPartyServiceHttp } from '@utils/Constants'
+import { SteamThirdPartyServicesHttp } from '@utils/Constants'
 import SteamUtils from '@utils/SteamUtils'
 
 export default abstract class SteamUser extends Command {
@@ -85,7 +85,7 @@ export default abstract class SteamUser extends Command {
             `${polyglot.t('commands.steam.user.steam_trades.reputation')}`,
             `- ${polyglot.t('commands.steam.user.steam_trades.positive')}: ${user.steamTrades.reputation.positive}`,
             `- ${polyglot.t('commands.steam.user.steam_trades.negative')}: ${user.steamTrades.reputation.negative}`,
-            `${polyglot.t('commands.steam.user.steam_trades.trades')}: ${user.steamTrades.trades ? hyperlink(user.steamTrades.trades.toString(), `${SteamThirdPartyServiceHttp.STEAM_TRADES}/trades/search?user=${user.steamId64}`) : user.steamTrades.trades}`
+            `${polyglot.t('commands.steam.user.steam_trades.trades')}: ${user.steamTrades.trades ? hyperlink(user.steamTrades.trades.toString(), `${SteamThirdPartyServicesHttp.STEAM_TRADES}/trades/search?user=${user.steamId64}`) : user.steamTrades.trades}`
           ].join('\n'),
           inline: true
         },

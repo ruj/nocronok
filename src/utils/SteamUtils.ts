@@ -5,7 +5,7 @@ import { parseStringPromise } from 'xml2js'
 import { ESteamProfilePrivacyStates, ESteamThirdPartyServices } from '@enums'
 import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 
-import { SteamHttp, SteamThirdPartyServiceHttp } from './Constants'
+import { SteamHttp, SteamThirdPartyServicesHttp } from './Constants'
 import { GET } from './http'
 
 export enum EIdentifierFormat {
@@ -99,7 +99,7 @@ export default class SteamUtils {
     userId: string
   ): Promise<ISteamTradesFindUser> {
     const profileUrl = [
-      `${SteamThirdPartyServiceHttp.STEAM_TRADES}/user`,
+      `${SteamThirdPartyServicesHttp.STEAM_TRADES}/user`,
       SteamUtils.hydrolyzeProfileIdentifier(userId, EIdentifierFormat.SHORT)
     ].join('/')
 
@@ -194,7 +194,7 @@ export default class SteamUtils {
     return (
       userId.isValid() &&
       `${
-        SteamThirdPartyServiceHttp[thirdPartyServiceName]
+        SteamThirdPartyServicesHttp[thirdPartyServiceName]
       }/${pathPrefix!}/${userId.toString()}`
     )
   }
