@@ -1,7 +1,7 @@
 import ApiWrapper from '@structures/ApiWrapper'
 import { GET } from '@utils/http'
 
-export interface ISteamRepReputationResponse {
+export interface ISteamRepReputation {
   status: string
   details: string
 }
@@ -11,9 +11,7 @@ export default class SteamRep extends ApiWrapper {
     super({ name: 'steamRep', baseUrl: 'https://steamrep.com/api' })
   }
 
-  public async reputation (
-    steamId: string
-  ): Promise<ISteamRepReputationResponse> {
+  public async reputation (steamId: string): Promise<ISteamRepReputation> {
     const data = await this.request<{
       steamrep: { reputation: { full: string; summary: string } }
     }>(
