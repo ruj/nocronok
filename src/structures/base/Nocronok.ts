@@ -1,16 +1,18 @@
 import { PrismaClient } from '@prisma/client'
 import { Client, GatewayIntentBits } from 'discord.js'
+import type { Logger } from 'pino'
 
 import { type IDefaultOptions } from '@interfaces'
 import loaders from '@loaders'
 import { type PolyglotExtended } from '@types'
+import Environment from '@utils/Environment'
 import Mapper from '@utils/Mapper'
 import Options from '@utils/Options'
 
 import { logger } from './Logger'
 
 export default class Nocronok extends Client {
-  public logger
+  public logger: Logger
   public defaultOptions: IDefaultOptions
   public apis: Record<string, any>
   public commands: Mapper<string, any>
@@ -22,7 +24,7 @@ export default class Nocronok extends Client {
       intents: [GatewayIntentBits.Guilds]
     })
 
-    this.logger = logger({ prettyPrint: !process.env.NODE_ENV })
+    this.logger = logger({ prettyPrint: Environment.isDev() })
     this.defaultOptions = Options.defaultOptions()
 
     this.apis = {}
