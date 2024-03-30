@@ -1,6 +1,8 @@
 import type Nocronok from '@structures/base/Nocronok'
 import Loader from '@structures/Loader'
 import Polyglot from '@structures/Polyglot'
+import { type PolyglotExtended } from '@types'
+import Mapper from '@utils/Mapper'
 
 export default class LocaleLoader extends Loader {
   public locales: Record<string, any>
@@ -31,7 +33,7 @@ export default class LocaleLoader extends Loader {
   }
 
   private initializePolyglot (): void {
-    const polyglots = new Map()
+    const polyglots = new Mapper()
 
     for (const locale in this.locales) {
       const polyglot = new Polyglot()
@@ -40,6 +42,6 @@ export default class LocaleLoader extends Loader {
       polyglots.set(locale, polyglot)
     }
 
-    this.client.polyglots = polyglots
+    this.client.polyglots = polyglots as Mapper<string, PolyglotExtended>
   }
 }
