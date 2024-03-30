@@ -7,9 +7,10 @@ import type {
 import type Nocronok from '@structures/base/Nocronok'
 import { Context } from '@structures/command'
 import Listener from '@structures/Listener'
+import type Mapper from '@utils/Mapper'
 
 export default class InteractionCreate extends Listener {
-  public commands: Map<string, any>
+  public commands: Mapper<string, any>
 
   constructor (client: Nocronok) {
     super(client)
