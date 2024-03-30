@@ -1,16 +1,9 @@
 import camelCase from 'lodash/camelCase'
 import isArray from 'lodash/isArray'
 import isObject from 'lodash/isObject'
-import sample from 'lodash/sample'
 import transform from 'lodash/transform'
 
-import type {
-  IApiWrapperOptions,
-  ICommandOptions,
-  IListenerOptions,
-  IOptionHandler,
-  IRouteOptions
-} from '@interfaces'
+import type { IOptionHandler } from '@interfaces'
 
 type SnakeToCamel<Type extends Record<string, any>> = {
   [Key in keyof Type as Uncapitalize<string & Key>]: Type[Key]
