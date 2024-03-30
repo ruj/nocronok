@@ -1,5 +1,5 @@
-import { readdir, stat } from 'fs/promises'
-import { resolve, sep } from 'path'
+import { readdir, stat } from 'node:fs/promises'
+import { resolve, sep } from 'node:path'
 
 import { type IFileObject, type IRequireDirectoryOptions } from '@interfaces'
 

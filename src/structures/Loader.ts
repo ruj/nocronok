@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import type { Logger } from 'pino'
 
 import { type IRequireDirectoryOptions } from '@interfaces'
