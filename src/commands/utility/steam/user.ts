@@ -2,7 +2,7 @@ import { hyperlink, type Message } from 'discord.js'
 import camelCase from 'lodash/camelCase'
 import startCase from 'lodash/startCase'
 
-import { type ISteamRepReputationResponse } from '@apis/SteamRep'
+import { type ISteamRepReputation } from '@apis/SteamRep'
 import { type ISteamTradesFindUser, type ISteamFindUser } from '@interfaces'
 import type Nocronok from '@structures/base/Nocronok'
 import { Command, type Context, Embed } from '@structures/command'
@@ -25,7 +25,7 @@ export default abstract class SteamUser extends Command {
     await interaction.deferReply()
 
     const user: ISteamFindUser & {
-      steamRep?: ISteamRepReputationResponse
+      steamRep?: ISteamRepReputation
       steamTrades?: ISteamTradesFindUser
     } = await SteamUtils.findUser(interaction.options.getString('user')!)
 
