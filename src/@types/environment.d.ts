@@ -5,6 +5,7 @@ declare global {
       HTTP_PASSWORD?: string
       DEVELOPERS_ID?: string
       DISCORD_TOKEN: string
+      SENTRY_DSN: string
     }
   }
 }

@@ -26,6 +26,7 @@
     "lodash": "^4.17.21",
     "node-polyglot": "^2.5.0",
     "pino": "^8.19.0",
+    "pino-sentry": "^0.14.1",
     "steamid": "^2.0.0",
     "xml2js": "^0.6.2"
   },
@@ -34,7 +35,6 @@
     "@types/lodash": "^4.14.202",
     "@types/node": "^20.11.19",
     "@types/node-polyglot": "^2.5.0",
-    "@types/pino": "^7.0.5",
     "@types/steamid": "^2.0.3",
     "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
